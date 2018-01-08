@@ -1,0 +1,171 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\PlatformResource.rc2""  // 不是由 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""     // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 6,7,0,1
+ PRODUCTVERSION 6,7,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "Comments", "深圳市网狐科技有限公司"
+            VALUE "CompanyName", "深圳市网狐科技有限公司"
+            VALUE "FileDescription", "平台资源"
+            VALUE "FileVersion", "6, 7, 0, 1"
+            VALUE "InternalName", "PlatformResource.dll"
+            VALUE "LegalCopyright", "深圳市网狐科技有限公司保留所有权利。"
+            VALUE "OriginalFilename", "PlatformResource.dll"
+            VALUE "ProductName", "平台资源"
+            VALUE "ProductVersion", "6, 7, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_HAND_CUR            CURSOR                  "Res\\HAND_CUR.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+BT_SKIN_MIN             PNG                     "res\\SKIN_CONTROL\\BT_SKIN_MIN.png"
+BT_SKIN_MAX             PNG                     "res\\SKIN_CONTROL\\BT_SKIN_MAX.png"
+BT_SKIN_RESORE          PNG                     "res\\SKIN_CONTROL\\BT_SKIN_RESORE.png"
+BT_SKIN_CLOSE           PNG                     "res\\SKIN_CONTROL\\BT_SKIN_CLOSE.png"
+CHECK_NORMAL            PNG                     "res\\CHECK_NORMAL.png"
+CHECK_CHECKED           PNG                     "res\\CHECK_CHECKED.png"
+RADIO_NORMAL            PNG                     "res\\RADIO_NORMAL.png"
+RADIO_CHECKED           PNG                     "res\\RADIO_CHECKED.png"
+BT_SKIN_ITEM            PNG                     "res\\BT_SKIN_ITEM.png"
+EDIT_SKIN_NORMAL        PNG                     "res\\EDIT_SKIN_NORMAL.png"
+IMAGE_ROUND_FRAME       PNG                     "res\\IMAGE_ROUND_FRAME.png"
+IMAGE_WHISPER_TITLE     PNG                     "res\\PLATFORM_WHISPER\\IMAGE_WHISPER_TITLE.png"
+BT_WHISPER_SEND         PNG                     "res\\PLATFORM_WHISPER\\BT_WHISPER_SEND.png"
+BT_WHISPER_CLOSE        PNG                     "res\\PLATFORM_WHISPER\\BT_WHISPER_CLOSE.png"
+BT_WHISPER_DOWN         PNG                     "res\\PLATFORM_WHISPER\\BT_WHISPER_DOWN.png"
+BT_CHAT_BUTTON_1        PNG                     "res\\PLATFORM_WHISPER\\BT_CHAT_BUTTON_1.png"
+BT_CHAT_BUTTON_2        PNG                     "res\\PLATFORM_WHISPER\\BT_CHAT_BUTTON_2.png"
+BT_CHAT_BUTTON_3        PNG                     "res\\PLATFORM_WHISPER\\BT_CHAT_BUTTON_3.png"
+BT_USER_MENU            PNG                     "res\\PLATFORM_WHISPER\\BT_USER_MENU.png"
+BT_SHIELD_CHAT_1        PNG                     "res\\PLATFORM_WHISPER\\BT_SHIELD_CHAT_1.png"
+BT_SHIELD_CHAT_2        PNG                     "res\\PLATFORM_WHISPER\\BT_SHIELD_CHAT_2.png"
+BT_SET_DETEST_1         PNG                     "res\\PLATFORM_WHISPER\\BT_SET_DETEST_1.png"
+BT_SET_DETEST_2         PNG                     "res\\PLATFORM_WHISPER\\BT_SET_DETEST_2.png"
+BT_ADD_FRIEND_1         PNG                     "res\\PLATFORM_WHISPER\\BT_ADD_FRIEND_1.png"
+BT_ADD_FRIEND_2         PNG                     "res\\PLATFORM_WHISPER\\BT_ADD_FRIEND_2.png"
+BT_MESSAGE_SETTING      PNG                     "res\\PLATFORM_WHISPER\\BT_MESSAGE_SETTING.png"
+BT_CHAT_HISTORY         PNG                     "res\\PLATFORM_WHISPER\\BT_CHAT_HISTORY.png"
+WHISPER_AREA_ROUND      PNG                     "res\\PLATFORM_WHISPER\\AREA_ROUND.png"
+IMAGE_FACE_BACK         PNG                     "res\\PLATFORM_WHISPER\\IMAGE_FACE_BACK.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\PlatformResource.rc2"  // 不是由 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"     // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
