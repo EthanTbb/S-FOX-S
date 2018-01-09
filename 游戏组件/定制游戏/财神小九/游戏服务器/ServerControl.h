@@ -1,0 +1,24 @@
+#pragma once
+
+#define MAX_CARD					2
+
+//游戏控制基类
+class IServerControl
+{
+public:
+	IServerControl(void){};
+	virtual ~IServerControl(void){};
+
+public:
+	//服务器控制
+	virtual bool  ServerControl(WORD wSubCmdID, const void * pDataBuffer, WORD wDataSize, IServerUserItem * pIServerUserItem, ITableFrame * pITableFrame) = NULL;
+
+	//需要控制
+	virtual bool  NeedControl() = NULL;
+
+	//完成控制
+	virtual bool  CompleteControl() = NULL;
+
+	//开始控制
+	virtual void  GetSuitResult( BYTE cbTableCardArray[][MAX_CARD], BYTE cbTableCard[], LONGLONG lAllJettonScore[] ) = NULL;
+};
