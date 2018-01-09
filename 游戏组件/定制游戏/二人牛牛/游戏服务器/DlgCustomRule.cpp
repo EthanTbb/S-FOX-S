@@ -1,0 +1,226 @@
+#include "Stdafx.h"
+#include "Resource.h"
+#include "DlgCustomRule.h"
+
+//////////////////////////////////////////////////////////////////////////////////
+
+BEGIN_MESSAGE_MAP(CDlgCustomRule, CDialog)
+END_MESSAGE_MAP()
+
+//////////////////////////////////////////////////////////////////////////////////
+
+//构造函数
+CDlgCustomRule::CDlgCustomRule() : CDialog(IDD_CUSTOM_RULE)
+{
+  //设置变量
+  ZeroMemory(&m_CustomRule,sizeof(m_CustomRule));
+
+  m_CustomRule.lFirstRange0 = 0;
+  m_CustomRule.lFirstRange1 = 50000;
+  m_CustomRule.lSecondRange0 = 50000;
+  m_CustomRule.lSecondRange1 = 100000;
+  m_CustomRule.lThirdRange0 = 100000;
+
+  m_CustomRule.cbRobotRadio1 = 30;
+  m_CustomRule.cbRobotRadio2 = 50;
+  m_CustomRule.cbRobotRadio3 = 80;
+
+  m_CustomRule.lRobotScoreMin = 100000;
+  m_CustomRule.lRobotScoreMax = 1000000;
+  m_CustomRule.lRobotBankGet = 1000000;
+  m_CustomRule.lRobotBankGetBanker = 10000000;
+  m_CustomRule.lRobotBankStoMul = 10;
+
+  //库存控制
+  m_CustomRule.lStorageStart = 1000000;
+  m_CustomRule.lStorageDeduct = 0;
+  m_CustomRule.lStorageMax = 5000000;
+  m_CustomRule.lStorageMul = 80;
+  m_CustomRule.lBonus = 500000;
+
+  return;
+}
+
+//析构函数
+CDlgCustomRule::~CDlgCustomRule()
+{
+}
+
+//配置函数
+BOOL CDlgCustomRule::OnInitDialog()
+{
+  __super::OnInitDialog();
+
+  //设置控件
+  ((CEdit*)GetDlgItem(IDC_EDIT_FIRST_RANGE0))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_FIRST_RANGE1))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_SECOND_RANGE0))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_SECOND_RANGE1))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_THIRD_RANGE0))->LimitText(10);
+
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOT_RADIO1))->LimitText(2);
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOT_RADIO2))->LimitText(2);
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOT_RADIO3))->LimitText(2);
+
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOTSCOREMIN))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOTSCOREMAX))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOTBANKGET))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOTBANKGETBANKER))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_ROBOTBANKSTOMUL))->LimitText(2);
+
+  ((CEdit*)GetDlgItem(IDC_EDIT_STORAGE_START))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_STORAGE_DEDUCT))->LimitText(3);
+  ((CEdit*)GetDlgItem(IDC_EDIT_STORAGE_MAX))->LimitText(10);
+  ((CEdit*)GetDlgItem(IDC_EDIT_STORAGE_MUL))->LimitText(2);
+  ((CEdit*)GetDlgItem(IDC_EDIT_BONUS))->LimitText(10);
+
+  //更新参数
+  FillDataToControl();
+
+  return FALSE;
+}
+
+//确定函数
+VOID CDlgCustomRule::OnOK()
+{
+  //投递消息
+  GetParent()->PostMessage(WM_COMMAND, MAKELONG(IDOK, 0), 0);
+
+  return;
+}
+
+//取消消息
+VOID CDlgCustomRule::OnCancel()
+{
+  //投递消息
+  GetParent()->PostMessage(WM_COMMAND, MAKELONG(IDCANCEL, 0), 0);
+
+  return;
+}
+
+//更新控件
+bool CDlgCustomRule::FillDataToControl()
+{
+  //设置数据
+  SetDlgItemInt(IDC_EDIT_FIRST_RANGE0, m_CustomRule.lFirstRange0);
+  SetDlgItemInt(IDC_EDIT_FIRST_RANGE1, m_CustomRule.lFirstRange1);
+  SetDlgItemInt(IDC_EDIT_SECOND_RANGE0, m_CustomRule.lSecondRange0);
+  SetDlgItemInt(IDC_EDIT_SECOND_RANGE1, m_CustomRule.lSecondRange1);
+  SetDlgItemInt(IDC_EDIT_THIRD_RANGE0, m_CustomRule.lThirdRange0);
+
+  //机器人赢分几率
+  SetDlgItemInt(IDC_EDIT_ROBOT_RADIO1, m_CustomRule.cbRobotRadio1);
+  SetDlgItemInt(IDC_EDIT_ROBOT_RADIO2, m_CustomRule.cbRobotRadio2);
+  SetDlgItemInt(IDC_EDIT_ROBOT_RADIO3, m_CustomRule.cbRobotRadio3);
+
+  //机器人存储款
+  SetDlgItemInt(IDC_EDIT_ROBOTSCOREMIN, m_CustomRule.lRobotScoreMin);
+  SetDlgItemInt(IDC_EDIT_ROBOTSCOREMAX, m_CustomRule.lRobotScoreMax);
+  SetDlgItemInt(IDC_EDIT_ROBOTBANKGET, m_CustomRule.lRobotBankGet);
+  SetDlgItemInt(IDC_EDIT_ROBOTBANKGETBANKER, m_CustomRule.lRobotBankGetBanker);
+  SetDlgItemInt(IDC_EDIT_ROBOTBANKSTOMUL, m_CustomRule.lRobotBankStoMul);
+
+  //库存控制
+  SetDlgItemInt(IDC_EDIT_STORAGE_START, m_CustomRule.lStorageStart);
+  SetDlgItemInt(IDC_EDIT_STORAGE_DEDUCT, m_CustomRule.lStorageDeduct);
+  SetDlgItemInt(IDC_EDIT_STORAGE_MAX, m_CustomRule.lStorageMax);
+  SetDlgItemInt(IDC_EDIT_STORAGE_MUL, m_CustomRule.lStorageMul);
+  SetDlgItemInt(IDC_EDIT_BONUS, m_CustomRule.lBonus);
+
+  return true;
+}
+
+//更新数据
+bool CDlgCustomRule::FillControlToData()
+{
+  //设置数据
+  m_CustomRule.lFirstRange0 = (LONGLONG)GetDlgItemInt(IDC_EDIT_FIRST_RANGE0);
+  m_CustomRule.lFirstRange1 = (LONGLONG)GetDlgItemInt(IDC_EDIT_FIRST_RANGE1);
+  m_CustomRule.lSecondRange0 = (LONGLONG)GetDlgItemInt(IDC_EDIT_SECOND_RANGE0);
+  m_CustomRule.lSecondRange1 = (LONGLONG)GetDlgItemInt(IDC_EDIT_SECOND_RANGE1);
+  m_CustomRule.lThirdRange0 = (LONGLONG)GetDlgItemInt(IDC_EDIT_THIRD_RANGE0);
+
+  //机器人赢分几率
+  m_CustomRule.cbRobotRadio1 = (BYTE)GetDlgItemInt(IDC_EDIT_ROBOT_RADIO1);
+  m_CustomRule.cbRobotRadio2 = (BYTE)GetDlgItemInt(IDC_EDIT_ROBOT_RADIO2);
+  m_CustomRule.cbRobotRadio3 = (BYTE)GetDlgItemInt(IDC_EDIT_ROBOT_RADIO3);
+
+  //机器人存储款
+  m_CustomRule.lRobotScoreMin = (LONGLONG)GetDlgItemInt(IDC_EDIT_ROBOTSCOREMIN);
+  m_CustomRule.lRobotScoreMax = (LONGLONG)GetDlgItemInt(IDC_EDIT_ROBOTSCOREMAX);
+  m_CustomRule.lRobotBankGet = (LONGLONG)GetDlgItemInt(IDC_EDIT_ROBOTBANKGET);
+  m_CustomRule.lRobotBankGetBanker = (LONGLONG)GetDlgItemInt(IDC_EDIT_ROBOTBANKGETBANKER);
+  m_CustomRule.lRobotBankStoMul = (LONGLONG)GetDlgItemInt(IDC_EDIT_ROBOTBANKSTOMUL);
+
+  //库存控制
+  m_CustomRule.lStorageStart = (LONGLONG)GetDlgItemInt(IDC_EDIT_STORAGE_START);
+  m_CustomRule.lStorageDeduct = (LONGLONG)GetDlgItemInt(IDC_EDIT_STORAGE_DEDUCT);
+  m_CustomRule.lStorageMax = (LONGLONG)GetDlgItemInt(IDC_EDIT_STORAGE_MAX);
+  m_CustomRule.lStorageMul = (LONGLONG)GetDlgItemInt(IDC_EDIT_STORAGE_MUL);
+  m_CustomRule.lBonus = (LONGLONG)GetDlgItemInt(IDC_EDIT_BONUS);
+
+  if(!((m_CustomRule.cbRobotRadio2 > m_CustomRule.cbRobotRadio1) && (m_CustomRule.cbRobotRadio3 > m_CustomRule.cbRobotRadio2)))
+  {
+    AfxMessageBox(TEXT("机器人赢分几率应该递增"), MB_ICONSTOP);
+    return false;
+  }
+
+  if(!(m_CustomRule.lFirstRange1 > m_CustomRule.lFirstRange0)
+     || !(m_CustomRule.lSecondRange1 > m_CustomRule.lSecondRange0)
+    )
+  {
+    AfxMessageBox(TEXT("库存范围2 必须 大于范围1"), MB_ICONSTOP);
+    return false;
+  }
+
+  if(!(m_CustomRule.lSecondRange0 == m_CustomRule.lFirstRange1)
+     || !(m_CustomRule.lThirdRange0 == m_CustomRule.lSecondRange1))
+  {
+    AfxMessageBox(TEXT("上一个库存范围的最大值应该和下一个范围的最小值相等"), MB_ICONSTOP);
+    return false;
+  }
+
+  if(!(m_CustomRule.lRobotScoreMax > m_CustomRule.lRobotScoreMin))
+  {
+    AfxMessageBox(TEXT("存款最大值应大于取款最小值"), MB_ICONSTOP);
+    return false;
+  }
+
+  if(!(m_CustomRule.lRobotBankGetBanker > m_CustomRule.lRobotBankGet))
+  {
+    AfxMessageBox(TEXT("取款最大数额应大于取款最小数额"), MB_ICONSTOP);
+    return false;
+  }
+
+  return true;
+}
+
+//读取配置
+bool CDlgCustomRule::GetCustomRule(tagCustomRule & CustomRule)
+{
+  //读取参数
+  if(FillControlToData() == true)
+  {
+    CustomRule = m_CustomRule;
+    return true;
+  }
+
+  return false;
+}
+
+//设置配置
+bool CDlgCustomRule::SetCustomRule(tagCustomRule & CustomRule)
+{
+  //设置变量
+  m_CustomRule = CustomRule;
+
+  //更新参数
+  if(m_hWnd != NULL)
+  {
+    FillDataToControl();
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
