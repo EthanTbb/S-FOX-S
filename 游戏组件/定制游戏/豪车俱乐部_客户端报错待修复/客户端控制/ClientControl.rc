@@ -1,0 +1,256 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\ClientControl.rc2""  // 不是由 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""     // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "TODO: <公司名>"
+            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "ClientControl.dll"
+            VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
+            VALUE "OriginalFilename", "ClientControl.dll"
+            VALUE "ProductName", "TODO: <产品名>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CLIENT_CONTROL_EX DIALOGEX 0, 0, 666, 357
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "控制管理器"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "：：：：：",IDC_STATIC_TIMES,374,64,44,9
+    COMBOBOX        IDC_COMBO_TIMES,428,61,48,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "：：：：",IDC_RADIO_1,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,313,85,48,10
+    CONTROL         "：：：：",IDC_RADIO_2,"Button",BS_AUTORADIOBUTTON,258,
+                    85,48,10
+    CONTROL         "：：：：",IDC_RADIO_3,"Button",BS_AUTORADIOBUTTON,373,
+                    85,48,10
+    CONTROL         "：：：：",IDC_RADIO_4,"Button",BS_AUTORADIOBUTTON,436,
+                    85,54,10
+    CONTROL         "：：：：",IDC_RADIO_5,"Button",BS_AUTORADIOBUTTON,257,
+                    105,48,10
+    CONTROL         "：：：：",IDC_RADIO_6,"Button",BS_AUTORADIOBUTTON,315,
+                    105,50,10
+    CONTROL         "：：：：",IDC_RADIO_7,"Button",BS_AUTORADIOBUTTON,373,
+                    105,48,10
+    CONTROL         "：：：：",IDC_RADIO_8,"Button",BS_AUTORADIOBUTTON,436,
+                    105,55,10
+    LTEXT           "控制说明：",IDC_STATIC,198,126,54,9
+    CTEXT           "",IDC_STATIC_TEXT,255,127,206,8
+    PUSHBUTTON      "取消控制",IDC_BUTTON_RESET,358,151,54,16
+    PUSHBUTTON      "保存修改",IDC_BUTTON_OK,285,151,51,16
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,199,79,288,1
+    GROUPBOX        "控制选项（区域输赢控制比游戏库存控制策略优先）",
+                    IDC_STATIC,196,52,296,68
+    CONTROL         "庄家控制",IDC_RADIO_CT_BANKER,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP,199,62,57,10
+    CONTROL         "庄家赢",IDC_RADIO_WIN,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,258,62,40,10
+    CONTROL         "庄家输",IDC_RADIO_LOSE,"Button",BS_AUTORADIOBUTTON,317,
+                    62,40,10
+    CONTROL         "区域控制",IDC_RADIO_CT_AREA,"Button",BS_AUTORADIOBUTTON,
+                    198,85,49,10
+    EDITTEXT        IDC_EDIT_STORAGE_DEDUCT,362,8,41,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_STORAGE_CURRENT,470,8,62,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_STORAGE_MAX1,241,31,62,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_STORAGE_MUL1,362,30,41,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_STORAGE_MAX2,470,32,62,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_STORAGE_MUL2,599,32,41,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    PUSHBUTTON      "保存修改",IDC_BTN_UPDATE_STORAGE,598,0,55,16
+    RTEXT           "当前库存值：",IDC_STATIC,410,11,56,8
+    RTEXT           "库存衰减值：",IDC_STATIC,306,11,56,8
+    RTEXT           "库存起始值：",IDC_STATIC,185,10,56,8
+    EDITTEXT        IDC_EDIT_STORAGE_START,241,8,62,13,ES_AUTOHSCROLL | 
+                    ES_READONLY | ES_NUMBER
+    RTEXT           "库存上限1：",IDC_STATIC,185,33,56,8
+    RTEXT           "玩家赢分概率：",IDC_STATIC,306,33,56,8
+    RTEXT           "库存上限2：",IDC_STATIC,410,34,56,8
+    RTEXT           "玩家赢分概率：",IDC_STATIC,540,34,56,8
+    GROUPBOX        "玩家下注",IDC_STATIC,4,186,661,170
+    CONTROL         "",IDC_LIST_USER_BET,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | WS_TABSTOP,4,212,658,142,
+                    WS_EX_STATICEDGE
+    CONTROL         "",IDC_LIST_USER_BET_ALL,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | LVS_NOSCROLL | LVS_NOCOLUMNHEADER | 
+                    WS_TABSTOP,4,198,560,11,WS_EX_STATICEDGE
+    LTEXT           "",IDC_STORAGE_STATIC,539,10,52,10
+    LTEXT           "‰",IDC_STATIC,405,11,11,8
+    LTEXT           "%",IDC_STATIC,407,32,8,8
+    LTEXT           "%",IDC_STATIC,646,34,8,8
+    GROUPBOX        "游戏下注区域显示",IDC_STATIC,9,4,153,40
+    LTEXT           "显示玩家下注：",IDC_STATIC,22,17,58,8
+    COMBOBOX        IDC_COMBO_CHOOSE,91,13,61,40,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "隐藏机器人下注",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,23,31,80,10
+    GROUPBOX        "关注玩家目录",IDC_STATIC,8,50,154,129
+    EDITTEXT        IDC_EDIT_ADDUSER,20,61,83,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "添加",IDC_BUTTON_ADDUSER,111,61,44,14
+    LTEXT           "在线人数：",IDC_STATIC,566,199,41,8
+    LTEXT           "下注人数：",IDC_STATIC,615,199,41,8
+    LTEXT           "",IDC_STATIC_USERCOUNT,605,198,8,8
+    LTEXT           "",IDC_STATIC_BETCOUNT,654,198,8,8
+    LTEXT           "在下表中显示置顶",IDC_STATIC,23,167,69,8
+    PUSHBUTTON      "删除",IDC_BUTTON_DEL,110,162,44,14
+    CONTROL         "",IDC_LIST_ATTENTION_USER,"SysListView32",LVS_LIST | 
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,19,81,135,77
+    EDITTEXT        IDC_EDIT_CAR_1,505,51,59,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "路虎",IDC_BUTTON_CAR_1,510,67,50,14
+    EDITTEXT        IDC_EDIT_CAR_2,586,51,59,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "宝马",IDC_BUTTON_CAR_2,590,67,50,14
+    EDITTEXT        IDC_EDIT_CAR_3,505,84,59,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "法拉利",IDC_BUTTON_CAR_3,509,101,50,14
+    EDITTEXT        IDC_EDIT_CAR_4,585,84,59,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "玛莎拉蒂",IDC_BUTTON_CAR_4,589,101,50,14
+    EDITTEXT        IDC_EDIT_CAR_5,505,119,59,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "兰博基尼",IDC_BUTTON_CAR_5,509,135,50,14
+    EDITTEXT        IDC_EDIT_CAR_6,585,118,59,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "保时捷",IDC_BUTTON_CAR_6,589,135,50,14
+    EDITTEXT        IDC_EDIT_CAR_7,505,152,59,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "捷豹",IDC_BUTTON_CAR_7,509,169,50,14
+    EDITTEXT        IDC_EDIT_CAR_8,585,152,59,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "奔驰",IDC_BUTTON_CAR_8,589,169,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_CLIENT_CONTROL_EX, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 355
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\ClientControl.rc2"  // 不是由 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"     // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

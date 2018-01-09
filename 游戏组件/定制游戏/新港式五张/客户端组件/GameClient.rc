@@ -1,0 +1,251 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\GameClient.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""         // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\GameClient.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 6,7,0,1
+ PRODUCTVERSION 6,7,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "Comments", "深圳市网狐科技有限公司"
+            VALUE "CompanyName", "深圳市网狐科技有限公司"
+            VALUE "FileDescription", "新版五张游戏"
+            VALUE "FileVersion", "6, 7, 0, 1"
+            VALUE "InternalName", "HKFiveCardNew.exe"
+            VALUE "LegalCopyright", "深圳市网狐科技有限公司保留所有权利。"
+            VALUE "OriginalFilename", "HKFiveCardNew.exe"
+            VALUE "ProductName", "新版五张游戏"
+            VALUE "ProductVersion", "6, 7, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+GAME_LOGO               BITMAP                  "Res\\GAME_LOGO.bmp"
+IDB_BT_START            BITMAP                  "res\\BT_START.bmp"
+IDB_BT_MIN_BUTTON       BITMAP                  "res\\BT_MIN_BUTTON.bmp"
+IDB_BT_SOUND_OPEN       BITMAP                  "res\\BT_SOUND_OPEN.bmp"
+IDB_BT_SOUND_CLOSE      BITMAP                  "res\\BT_SOUND_CLOSE.bmp"
+IDB_BT_CLOSE_BUTTON     BITMAP                  "res\\BT_CLOSE_BUTTON.bmp"
+IDB_BT_ADD_SCORE        BITMAP                  "res\\CONTROL\\BT_ADD_SCORE.BMP"
+IDB_BT_CONTROL_FOLLOW   BITMAP                  "res\\CONTROL\\BT_CONTROL_FOLLOW.BMP"
+IDB_BT_CONTROL_GIVEUP   BITMAP                  "res\\CONTROL\\BT_CONTROL_GIVEUP.BMP"
+IDB_BT_CONTROL_NOADD    BITMAP                  "res\\CONTROL\\BT_CONTROL_NOADD.BMP"
+IDB_BT_CONTROL_SHOWHAND BITMAP                  "res\\CONTROL\\BT_CONTROL_SHOWHAND.BMP"
+IDB_BT_CONTROL_OK       BITMAP                  "res\\CONTROL\\BT_OK.BMP"
+IDB_BT_SCORE            BITMAP                  "res\\CONTROL\\BT_SCORE.BMP"
+IDB_SCROLL_BAR          BITMAP                  "res\\SCROLL_BAR.bmp"
+IDB_BT_SEND_MESSAGE     BITMAP                  "res\\BT_SEND_MESSAGE.bmp"
+IDB_BT_SHOW_CHAT        BITMAP                  "res\\BT_SHOW_CHAT.bmp"
+IDB_BT_HIDE_CHAT        BITMAP                  "res\\BT_HIDE_CHAT.bmp"
+IDB_BT_OPTION           BITMAP                  "res\\BT_OPTION.bmp"
+IDB_FRAME_TOP			 BITMAP						"res\\FRAME_TOP.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CARD_CUR            CURSOR                  "res\\CARD_CUR.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+VIEW_BACK               PNG                     "res\\VIEW_BACK.png"
+READY                   PNG                     "res\\READY.png"
+GAME_CARD               PNG                     "res\\CARD.png"
+GAME_CARD_MID           PNG                     "res\\CARD_MID.png"
+SHOW_HAND               PNG                     "res\\SHOW_HAND.png"
+JETTON_VIEW             PNG                     "res\\JETTON_VIEW.png"
+ACTION_FONT             PNG                     "res\\ACTION_FONT.png"
+ACTION_BACK             PNG                     "res\\ACTION_BACK.png"
+SCORE_NUMBER            PNG                     "res\\SCORE_NUMBER.png"
+USER_INFO               PNG                     "res\\USER_INFO.png"
+USER_SCORE              PNG                     "res\\USER_SCORE.png"
+USERPLAYING_INFO        PNG                     "res\\USERPLAYING_INFO.png"
+CELL_NUMBER             PNG                     "res\\CELL_NUMBER.png"
+TIME_NUMBER             PNG                     "res\\TIME_NUMBER.png"
+TIME_BACK               PNG                     "res\\TIME_BACK.png"
+CARD_TYPE               PNG                     "res\\CARD_TYPE.png"
+USER_CONTROL            PNG                     "res\\CONTROL\\USER_CONTROL.png"
+USER_CONTROL_BACK       PNG                     "res\\CONTROL\\USER_CONTROL_BACK.png"
+CONTROL_NUMBER          PNG                     "res\\CONTROL\\CONTROL_NUMBER.png"
+ARROW_CONTROL           PNG                     "res\\CONTROL\\ARROW_CONTROL.png"
+ARROW_CONTROL_BACK      PNG                     "res\\CONTROL\\ARROW_CONTROL_BACK.png"
+ARROW_CONTROL_SELECT    PNG                     "res\\CONTROL\\ARROW_CONTROL_SELECT.png"
+GAME_SCORE_L            PNG                     "res\\GAME_OVER\\GAME_SCORE_L.png"
+GAME_SCORE_M            PNG                     "res\\GAME_OVER\\GAME_SCORE_M.png"
+GAME_SCORE_R            PNG                     "res\\GAME_OVER\\GAME_SCORE_R.png"
+MY_GAME_SCORE_L         PNG                     "res\\GAME_OVER\\MY_GAME_SCORE_L.png"
+MY_GAME_SCORE_M         PNG                     "res\\GAME_OVER\\MY_GAME_SCORE_M.png"
+MY_GAME_SCORE_R         PNG                     "res\\GAME_OVER\\MY_GAME_SCORE_R.png"
+GAME_OVER_SCORE_NUMBER  PNG                     "res\\GAME_OVER\\GAME_OVER_SCORE_NUMBER.png"
+CHAT_BACK               PNG                     "res\\CHAT_BACK.png"
+USER_0_BOY              PNG                     "res\\USER_0_BOY.png"
+USER_1_BOY              PNG                     "res\\USER_1_BOY.png"
+USER_2_BOY              PNG                     "res\\USER_2_BOY.png"
+USER_3_BOY              PNG                     "res\\USER_3_BOY.png"
+USER_4_BOY              PNG                     "res\\USER_4_BOY.png"
+USER_0_BOY_EYE          PNG                     "res\\USER_0_BOY_EYE.png"
+USER_1_BOY_EYE          PNG                     "res\\USER_1_BOY_EYE.png"
+USER_2_BOY_EYE          PNG                     "res\\USER_2_BOY_EYE.png"
+USER_3_BOY_EYE          PNG                     "res\\USER_3_BOY_EYE.png"
+USER_4_BOY_EYE          PNG                     "res\\USER_4_BOY_EYE.png"
+USER_0_GIRL             PNG                     "res\\USER_0_GIRL.png"
+USER_1_GIRL             PNG                     "res\\USER_1_GIRL.png"
+USER_2_GIRL             PNG                     "res\\USER_2_GIRL.png"
+USER_3_GIRL             PNG                     "res\\USER_3_GIRL.png"
+USER_4_GIRL             PNG                     "res\\USER_4_GIRL.png"
+USER_0_GIRL_EYE         PNG                     "res\\USER_0_GIRL_EYE.png"
+USER_1_GIRL_EYE         PNG                     "res\\USER_1_GIRL_EYE.png"
+USER_2_GIRL_EYE         PNG                     "res\\USER_2_GIRL_EYE.png"
+USER_3_GIRL_EYE         PNG                     "res\\USER_3_GIRL_EYE.png"
+USER_4_GIRL_EYE         PNG                     "res\\USER_4_GIRL_EYE.png"
+TABLE                   PNG                     "res\\TABLE.png"
+FRAME_TOP               PNG                     "res\\FRAME_TOP.png"
+CELL_SCORE				 PNG						"res\\CELL_SCORE.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+SHOW_HAND               WAVE                    "res\\SHOW_HAND.wav"
+SEND_CARD               WAVE                    "res\\SEND_CARD.wav"
+GAME_WIN                WAVE                    "res\\GAME_WIN.wav"
+GAME_WARN               WAVE                    "res\\GAME_WARN.wav"
+GAME_START              WAVE                    "res\\GAME_START.wav"
+GAME_LOSE               WAVE                    "res\\GAME_LOSE.wav"
+GAME_END                WAVE                    "res\\GAME_END.wav"
+CHOOSE_SCORE            WAVE                    "res\\CHOOSE_SCORE.wav"
+
+ADD_SCORE_0             WAVE                    "res\\ADD_SCORE_0.wav"
+ADD_SCORE_1             WAVE                    "res\\ADD_SCORE_1.wav"
+FOLLOW_0                WAVE                    "res\\FOLLOW_O.wav"
+FOLLOW_1                WAVE                    "res\\FOLLOW_1.wav"
+NO_ADD_0                WAVE                    "res\\NO_ADD_0.wav"
+NO_ADD_1                WAVE                    "res\\NO_ADD_1.wav"
+GIVE_UP_0               WAVE                    "res\\GIVE_UP_0.wav"
+GIVE_UP_1               WAVE                    "res\\GIVE_UP_1.wav"
+
+READY					WAVE					"res\\Ready.wav"
+XIAZHU_0				WAVE					"res\\Xiazhu_0.wav"
+XIAZHU_1				WAVE					"res\\Xiazhu_1.wav"
+BET						WAVE					"res\\Bet.wav"
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\GameClient.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"         // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,412 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\GameClient.rc2""  // 非 Microsoft Visual C++ 编辑过的资源\r\n"
+    "#include ""afxres.rc""         // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\GameClient.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 6,7,0,1
+ PRODUCTVERSION 6,7,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "Comments", "深圳市网狐科技有限公司"
+            VALUE "CompanyName", "深圳市网狐科技有限公司"
+            VALUE "FileDescription", "豪车俱乐部游戏客户端"
+            VALUE "FileVersion", "6, 7, 0, 1"
+            VALUE "InternalName", "LuxuryCar.exe"
+            VALUE "LegalCopyright", "深圳市网狐科技有限公司保留所有权利。"
+            VALUE "OriginalFilename", "LuxuryCar.exe"
+            VALUE "ProductName", "豪车俱乐部游戏客户端"
+            VALUE "ProductVersion", "6, 7, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+GAME_LOGO               BITMAP                  "res\\GAME_LOGO.bmp"
+IDB_LISTCTRL_BACK       BITMAP                  "res\\listctrl_back.bmp"
+IDB_SCROLL_BAR          BITMAP                  "res\\scrollbar.bmp"
+IDB_LIST_TITLE          BITMAP                  "res\\LIST_TITLE.bmp"
+IDB_SKIN_SCROLL         BITMAP                  "res\\SKIN_SCROLL.bmp"
+IDB_USER_STATUS_IMAGE   BITMAP                  "res\\USER_STATUS_IMAGE.bmp"
+IDB_FLAG_PLAYER         BITMAP                  "res\\Player.bmp"
+IDB_FLAG_SYSTEM         BITMAP                  "res\\SysFlag.bmp"
+IDB_IMAGE_TRUMPET       BITMAP                  "Res\\IMAGE_TRUMPET.bmp"
+IDB_IMAGE_TYPHON        BITMAP                  "Res\\IMAGE_TYPHON.bmp"
+IDB_USER_LIST           BITMAP                  "Res\\Apply_List_Back.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+PNG_CENTER              PNG                     "res\\Center.png"
+CHANGE_BANKER           PNG                     "res\\CHANGE_BANKER.png"
+BANKER_TIME             PNG                     "res\\BANKER_TIME.png"
+END_LOSE_SCORE          PNG                     "res\\END_LOSE_SCORE.png"
+END_WIN_SCORE           PNG                     "res\\END_WIN_SCORE.png"
+IDB_END_CAR             PNG                     "res\\IDB_END_CAR.png"
+IDB_GAME_END_PNG        PNG                     "res\\IDB_GAME_END_PNG.png"
+IDB_CAR_FLAG            PNG                     "res\\IDB_IDB_FLAG_PNG.png"
+IDB_SEL_PNG             PNG                     "res\\IDB_IDB_SEL_PNG.png"
+IDB_MENUM_PNG           PNG                     "res\\IDB_MENUM_PNG.png"
+IDB_SCORE_PNG           PNG                     "res\\IDB_SCORE_PNG.png"
+IDB_TIMERCOUNT_PNG      PNG                     "res\\IDB_TIMERCOUNT_PNG.png"
+IDB_VIEW_END            PNG                     "res\\IDB_VIEW_END.png"
+IDB_VIEW_MULTIPLE       PNG                     "res\\IDB_VIEW_MULTIPLE.png"
+RECORD_LAST             PNG                     "res\\RECORD_LAST.png"
+PNG_BT_MINBUTTON        PNG                     "res\\minButton.png"
+PNG_BT_GAME_OPTION      PNG                     "res\\GameOption.png"
+PNG_BT_CLOSE_BUTTON     PNG                     "res\\closeButton.png"
+PNG_BT_JETTON_100       PNG                     "res\\BT_JETTON_100.png"
+PNG_BT_JETTON_1000      PNG                     "res\\BT_JETTON_1000.png"
+PNG_BT_JETTON_1W        PNG                     "res\\BT_JETTON_1W.png"
+PNG_BT_JETTON_5W        PNG                     "res\\BT_JETTON_5W.png"
+PNG_BT_JETTON_10W       PNG                     "res\\BT_JETTON_10W.png"
+PNG_BT_JETTON_100W      PNG                     "res\\BT_JETTON_100W.png"
+PNG_BT_JETTON_500W      PNG                     "res\\BT_JETTON_500W.png"
+PNG_BT_JETTON_1000W     PNG                     "res\\BT_JETTON_1000W.png"
+PNG_BT_JETTON_5000W     PNG                     "res\\BT_JETTON_5000W.png"
+PNG_BT_JETTON_1Y        PNG                     "res\\BT_JETTON_1Y.png"
+PNG_BT_JETTON_XUYA      PNG                     "res\\BT_JETTON_XUYA.png"
+PNG_BT_BANK             PNG                     "res\\BT_BANK.png"
+PNG_BT_UP               PNG                     "res\\BT_UP.png"
+PNG_BT_DOWN             PNG                     "res\\BT_DOWN.png"
+PNG_BT_APPLY_BANKER     PNG                     "res\\IDB_BTN_APPLY_BANKER.png"
+PNG_BT_CANCEL_BANKER    PNG                     "res\\IDB_BTN_CANCEL_BANKER.png"
+PNG_BT_SWITCH_CHAT      PNG                     "res\\BTN_SWITCH_CHAT.png"
+PNG_BT_SWITCH_USER_LIST PNG                     "res\\BTN_SWITCH_USER_LIST.png"
+PNG_BT_CHAT_TRUMPET     PNG                     "res\\BT_CHAT_TRUMPET.png"
+PNG_BT_CHAT_COLOR       PNG                     "res\\BT_CHAT_COLOR.png"
+PNG_BT_CHAT_EXPRESSION  PNG                     "res\\BT_CHAT_EXPRESSION.png"
+PNG_BT_SEND_CHAT        PNG                     "res\\BT_SEND_CHAT.png"
+CLOSE_WINDOW_BT_CANCEL  PNG                     "res\\CloseWindow_BtCancel.png"
+CLOSE_WINDOW_BT_OK      PNG                     "res\\CloseWindow_BtOK.png"
+CLOSE_WINDOW_BT_CLOSE   PNG                     "res\\CloseWindow_BtClose.png"
+CLOSE_WINDOW_BK         PNG                     "res\\CloseWindow_BK.png"
+CAR_MASERATI            PNG                     "res\\CAR_MASERATI.png"
+CAR_BMW                 PNG                     "res\\CAR_BMW.png"
+CAR_PORSCHE             PNG                     "res\\CAR_PORSCHE.png"
+CAR_BENZ                PNG                     "res\\CAR_BENZ.png"
+CAR_FERRARI             PNG                     "res\\CAR_FERRARI.png"
+CAR_JAGUAR              PNG                     "res\\CAR_JAGUAR.png"
+CAR_LAMBORGHINI         PNG                     "res\\CAR_LAMBORGHINI.png"
+CAR_LANDROVER           PNG                     "res\\CAR_LANDROVER.png"
+USER_BANKER_LIST        PNG                     "res\\USER_BANKER_LIST.png"
+BET_MASERATI            PNG                     "res\\BET_MASERATI.png"
+BET_BMW                 PNG                     "res\\BET_BMW.png"
+BET_PORSCHE             PNG                     "res\\BET_PORSCHE.png"
+BET_BENZ                PNG                     "res\\BET_BENZ.png"
+BET_FERRARI             PNG                     "res\\BET_FERRARI.png"
+BET_JAGUAR              PNG                     "res\\BET_JAGUAR.png"
+BET_LAMBORGHINI         PNG                     "res\\BET_LAMBORGHINI.png"
+BET_LANDROVER           PNG                     "res\\BET_LANDROVER.png"
+TIME_FREE               PNG                     "res\\IDB_TIME_FREE.png"
+TIME_BET                PNG                     "res\\IDB_TIME_BET.png"
+TIME_DRAWE              PNG                     "res\\IDB_TIME_DRAWE.png"
+BACK_MUTIPLE            PNG                     "res\\IDB_BACK_MUTIPLE.png"
+BET_MASK_LEFT           PNG                     "res\\BET_MASK_LEFT.png"
+BET_MASK_RIGHT          PNG                     "res\\BET_MASK_RIGHT.png"
+USER_BET_INFO			PNG						"res\\USER_INFO_ME.png"
+BET_FLAG_TOTAL			PNG						"res\\BET_FLAG_TOTAL.png"
+BET_FLAG_ME				PNG						"res\\BET_FLAG_ME.png"
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+ADD_GOLD                WAVE                    "res\\sound\\ADD_GOLD.wav"
+ADD_GOLD_EX             WAVE                    "res\\sound\\ADD_GOLD_EX.wav"
+BACK_GROUND             WAVE                    "res\\sound\\BACK_GROUND.wav"
+END_WIN                 WAVE                    "res\\sound\\END_WIN.wav"
+END_LOST                WAVE                    "res\\sound\\END_LOST.wav"
+END_DRAW                WAVE                    "res\\sound\\END_DRAW.wav"
+TIME_WARIMG             WAVE                    "res\\sound\\TIME_WARIMG.wav"
+DISPATCH_CARD           WAVE                    "res\\sound\\DISPATCH_CARD.wav"
+GAME_START              WAVE                    "res\\sound\\GAME_START.wav"
+CHEER1                  WAVE                    "res\\sound\\CHEER1.wav"
+CHEER2                  WAVE                    "res\\sound\\CHEER2.wav"
+CHEER3                  WAVE                    "res\\sound\\CHEER3.wav"
+LEAVEHANDLEWAV          WAVE                    "res\\sound\\买定离手.wav"
+PLEASEJETTONWAV         WAVE                    "res\\sound\\请下注.wav"
+SPEEKSOUNDWAV           WAVE                    "res\\sound\\说话声.wav"
+IDC_SNDWAV              WAVE                    "res\\sound\\idc_snd_.WAV"
+BET                     WAVE                    "res\\sound\\Bet.wav"
+BET_BK                  WAVE                    "res\\sound\\BetBk.wav"
+BET_END                 WAVE                    "res\\sound\\BetEnd.wav"
+BET_START               WAVE                    "res\\sound\\BetStart.wav"
+FREE_BK                 WAVE                    "res\\sound\\FreeBk.wav"
+GAME_END                WAVE                    "res\\sound\\GameEnd.wav"
+GUN                     WAVE                    "res\\sound\\Gun.wav"
+ROLL                    WAVE                    "res\\sound\\Roll.wav"
+WARNING                 WAVE                    "res\\sound\\Warn.wav"
+SND_SELGRID_BIGWARN     WAVE                    "res\\SND_SELGRID_BIGWARN.wav"
+SND_FLASH               WAVE                    "res\\SND_FLASH.wav"
+SND_STARTSHOWCARD       WAVE                    "res\\SND_STARTSHOWCARD.wav"
+BACK_GROUND_BET         WAVE                    "res\\sound\\BACK_GROUND_BET.wav"
+BACK_GROUND_DRAW        WAVE                    "res\\sound\\BACK_GROUND_DRAW.wav"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_BANK_STORAGE DIALOGEX 0, 0, 331, 210
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "请输入游戏币数目：",-1,42,103,73,8
+    EDITTEXT        IDC_IN_COUNT,120,100,114,12,ES_AUTOHSCROLL
+    LTEXT           "请输入密码：",IDC_STATIC_PASS,42,122,51,8
+    EDITTEXT        IDC_USER_PASSWORD,120,119,114,12,ES_PASSWORD | 
+                    ES_AUTOHSCROLL
+    CONTROL         "全部金币",IDC_CHECK_ALL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,240,102,48,10
+END
+
+IDD_DLG_GAME_RECORD DIALOGEX 0, 0, 328, 105
+STYLE DS_SETFONT | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | 
+    WS_SYSMENU
+FONT 9, "宋体", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_RECORD_LIST,"SysListView32",LVS_REPORT | 
+                    LVS_SHAREIMAGELISTS | LVS_ALIGNLEFT | LVS_NOSCROLL | 
+                    LVS_NOCOLUMNHEADER | WS_TABSTOP,0,0,327,105
+END
+
+IDD_OPTION DIALOGEX 0, 0, 199, 99
+STYLE DS_SETFONT | WS_POPUP | WS_SYSMENU
+FONT 9, "宋体", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,18,76,47,14
+    PUSHBUTTON      "取消",IDCANCEL,130,76,47,14
+    GROUPBOX        "",IDC_STATIC,18,26,160,45
+    LTEXT           "常规配置：",IDC_STATIC,24,32,41,8
+    CONTROL         "允许背景音效",IDC_ENABLE_BG_SOUND,"Button",
+                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,68,55,65,10
+    CONTROL         "允许声音效果",IDC_ENABLE_SOUND,"Button",BS_AUTOCHECKBOX | 
+                    BS_FLAT | WS_TABSTOP,68,39,65,10
+END
+
+IDD_MESSAGEDLG DIALOGEX 0, 0, 187, 94
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "您正在游戏中，确定要强退吗？",IDC_STATIC,30,42,141,8
+    DEFPUSHBUTTON   "确定",IDOK,18,70,47,13
+    PUSHBUTTON      "取消",IDCANCEL,130,70,47,13
+END
+
+IDD_DIALOG_MES DIALOGEX 0, 0, 201, 75
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,68,54,50,14
+    PUSHBUTTON      "",IDC_BUTTON_CLOSE,172,5,23,17
+END
+
+IDD_BANKTIPS_DLG DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,23,74,50,14
+    PUSHBUTTON      "取消",IDCANCEL,121,74,50,14
+    CONTROL         "存款",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,
+                    47,39,32,10
+    CONTROL         "取款",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,98,39,32,
+                    10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DLG_GAME_RECORD, DIALOG
+    BEGIN
+        RIGHTMARGIN, 186
+        BOTTOMMARGIN, 95
+    END
+
+    IDD_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 192
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_MESSAGEDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_DIALOG_MES, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 195
+        TOPMARGIN, 5
+        BOTTOMMARGIN, 68
+    END
+
+    IDD_BANKTIPS_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_SCORE_1Y            CURSOR                  "res\\cur_1Y.cur"
+IDC_SCORE_5000W         CURSOR                  "res\\cur_5000w.cur"
+IDC_SCORE_1000W         CURSOR                  "res\\cur_1000w.cur"
+IDC_SCORE_500W          CURSOR                  "res\\cur_500w.cur"
+IDC_SCORE_100W          CURSOR                  "res\\cur_100w.cur"
+IDC_SCORE_50W           CURSOR                  "res\\cur_50w.cur"
+IDC_SCORE_10W           CURSOR                  "res\\cur_10w.cur"
+IDC_SCORE_1W            CURSOR                  "res\\cur_1w.cur"
+IDC_SCORE_100			CURSOR                  "res\\cur_100.cur"
+IDC_SCORE_1000			CURSOR                  "res\\cur_1000.cur"
+IDC_SCORE_5W			CURSOR                  "res\\cur_5w.cur"
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "豪车俱乐部"
+    BEGIN
+        MENUITEM "更多颜色",                    IDM_MORE_COLOR
+    END
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\GameClient.rc2"  // 非 Microsoft Visual C++ 编辑过的资源
+#include "afxres.rc"         // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
