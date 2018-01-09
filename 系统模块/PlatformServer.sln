@@ -68,6 +68,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "公共模块", "公共模块", "{A6
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "进程控制", "公共组件\进程控制\ProcessControl.vcxproj", "{D4816EB8-590E-4EBC-9D61-2A77D0070FEE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "控制客户端", "..\游戏组件\定制游戏\诈金花\客户端控制\ClientControl.vcxproj", "{116A3A10-8D36-438C-AF56-7EEBD969A400}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "诈金花客户端", "..\游戏组件\定制游戏\诈金花\游戏客户端\GameClient.vcxproj", "{F2D70F30-23FC-4973-A798-AED329359B33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_Unicode|x86 = Debug_Unicode|x86
@@ -260,6 +264,22 @@ Global
 		{D4816EB8-590E-4EBC-9D61-2A77D0070FEE}.Release_Unicode|x86.Build.0 = Release_Unicode|Win32
 		{D4816EB8-590E-4EBC-9D61-2A77D0070FEE}.Release|x86.ActiveCfg = Release|Win32
 		{D4816EB8-590E-4EBC-9D61-2A77D0070FEE}.Release|x86.Build.0 = Release|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Debug_Unicode|x86.ActiveCfg = Debug_Unicode|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Debug_Unicode|x86.Build.0 = Debug_Unicode|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Debug|x86.ActiveCfg = Debug|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Debug|x86.Build.0 = Debug|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Release_Unicode|x86.ActiveCfg = Release_Unicode|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Release_Unicode|x86.Build.0 = Release_Unicode|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Release|x86.ActiveCfg = Release|Win32
+		{116A3A10-8D36-438C-AF56-7EEBD969A400}.Release|x86.Build.0 = Release|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Debug_Unicode|x86.ActiveCfg = Debug_Unicode|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Debug_Unicode|x86.Build.0 = Debug_Unicode|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Debug|x86.ActiveCfg = Debug|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Debug|x86.Build.0 = Debug|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Release_Unicode|x86.ActiveCfg = Release_Unicode|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Release_Unicode|x86.Build.0 = Release_Unicode|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Release|x86.ActiveCfg = Release|Win32
+		{F2D70F30-23FC-4973-A798-AED329359B33}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -295,6 +315,8 @@ Global
 		{795023D8-3133-4FBB-B18E-2572940E208F} = {93170AB7-0865-4556-A23B-E4022DB68C8E}
 		{06F54366-6718-4FA0-ADF8-47AE5D4CFC9D} = {795023D8-3133-4FBB-B18E-2572940E208F}
 		{D4816EB8-590E-4EBC-9D61-2A77D0070FEE} = {A6F73264-BF94-4C6D-B673-13C3C8D718BF}
+		{116A3A10-8D36-438C-AF56-7EEBD969A400} = {04D84DF0-3EDB-4442-B4B6-E470C3A614FC}
+		{F2D70F30-23FC-4973-A798-AED329359B33} = {04D84DF0-3EDB-4442-B4B6-E470C3A614FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6E7A09AD-6355-43CB-808C-0FEE36B91D87}
