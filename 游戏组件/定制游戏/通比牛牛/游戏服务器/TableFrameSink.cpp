@@ -600,56 +600,56 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
         {
           break;
         }
+
+		//对比玩家
+		for (WORD i = (wWinner + 1); i < GAME_PLAYER; i++)
+		{
+		  //用户过滤
+		  if (m_cbPlayStatus[i] == FALSE)
+		  {
+		     continue;
+		  }
+
+		  //对比扑克
+		  if (m_GameLogic.CompareCard(cbUserCardData[i], cbUserCardData[wWinner], MAX_COUNT, m_cbOxCard[i], m_cbOxCard[wWinner]) == true)
+		  {
+			wWinner = i;
+		  }
+		}
+
+		//游戏倍数
+		WORD wWinTimes = 0;
+		ASSERT(m_cbOxCard[wWinner]<2);
+		if (m_cbOxCard[wWinner] == FALSE)
+		{
+		  wWinTimes = 1;
+		}
+		else
+		{
+		  wWinTimes = m_GameLogic.GetTimes(cbUserCardData[wWinner], MAX_COUNT);
+		}
+
+		//统计得分
+		for (WORD i = 0; i < GAME_PLAYER; i++)
+		{
+		  //过虑玩家
+		  if (i == wWinner || m_cbPlayStatus[i] == FALSE)
+		  {
+			continue;
+		  }
+
+		  GameEnd.lGameScore[i] -= m_lTableScore[i] * wWinTimes;
+		  GameEnd.lGameScore[wWinner] += m_lTableScore[i] * wWinTimes;
+
+		  if ((m_GameLogic.GetCardType(m_cbHandCardData[wWinner], MAX_COUNT) == OX_FIVE_KING ? true : false))
+		  {
+			GameEnd.lGameScore[wWinner] += m_lBonus;
+		  }
+		}
+
+		//强退分数
+		GameEnd.lGameScore[wWinner] += m_lExitScore;
       }
-
-      //对比玩家
-      for(WORD i = (wWinner + 1); i < GAME_PLAYER; i++)
-      {
-        //用户过滤
-        if(m_cbPlayStatus[i] == FALSE)
-        {
-          continue;
-        }
-
-        //对比扑克
-        if(m_GameLogic.CompareCard(cbUserCardData[i], cbUserCardData[wWinner], MAX_COUNT, m_cbOxCard[i], m_cbOxCard[wWinner]) == true)
-        {
-          wWinner = i;
-        }
-      }
-
-      //游戏倍数
-      WORD wWinTimes = 0;
-      ASSERT(m_cbOxCard[wWinner]<2);
-      if(m_cbOxCard[wWinner]==FALSE)
-      {
-        wWinTimes = 1;
-      }
-      else
-      {
-        wWinTimes = m_GameLogic.GetTimes(cbUserCardData[wWinner], MAX_COUNT);
-      }
-
-      //统计得分
-      for(WORD i = 0; i < GAME_PLAYER; i++)
-      {
-        //过虑玩家
-        if(i == wWinner || m_cbPlayStatus[i] == FALSE)
-        {
-          continue;
-        }
-
-        GameEnd.lGameScore[i] -= m_lTableScore[i]*wWinTimes;
-        GameEnd.lGameScore[wWinner] += m_lTableScore[i]*wWinTimes;
-
-        if((m_GameLogic.GetCardType(m_cbHandCardData[wWinner], MAX_COUNT) == OX_FIVE_KING ? true : false))
-        {
-          GameEnd.lGameScore[wWinner] += m_lBonus;
-        }
-      }
-
-      //强退分数
-      GameEnd.lGameScore[wWinner] += m_lExitScore;
 
       //五花牛
       for(WORD i=0; i<GAME_PLAYER; i++)
@@ -890,22 +890,21 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
         m_pITableFrame->SendTableData(INVALID_CHAIR,SUB_S_GAME_END, &GameEnd, sizeof(GameEnd));
         m_pITableFrame->SendLookonData(INVALID_CHAIR,SUB_S_GAME_END, &GameEnd, sizeof(GameEnd));
 
-        for(WORD Zero = 0; Zero < GAME_PLAYER; Zero++) if(m_lTableScore[Zero] != 0)
-          {
-            break;
-          }
-        if(Zero != GAME_PLAYER)
-        {
-          //修改积分
-          tagScoreInfo ScoreInfoArray[GAME_PLAYER];
-          ZeroMemory(&ScoreInfoArray,sizeof(ScoreInfoArray));
-          ScoreInfoArray[wWinner].lScore = GameEnd.lGameScore[wWinner];
-          ScoreInfoArray[wWinner].lRevenue = GameEnd.lGameTax[wWinner];
-          ScoreInfoArray[wWinner].cbType = SCORE_TYPE_WIN;
+		for (WORD Zero = 0; Zero < GAME_PLAYER; Zero++) {
+		  if (m_lTableScore[Zero] != 0)
+		    break;
 
-          TryWriteTableScore(ScoreInfoArray);
-        }
-
+		  if (Zero != GAME_PLAYER)
+		  {
+			 //修改积分
+			 tagScoreInfo ScoreInfoArray[GAME_PLAYER];
+			 ZeroMemory(&ScoreInfoArray, sizeof(ScoreInfoArray));
+			 ScoreInfoArray[wWinner].lScore = GameEnd.lGameScore[wWinner];
+			 ScoreInfoArray[wWinner].lRevenue = GameEnd.lGameTax[wWinner];
+			 ScoreInfoArray[wWinner].cbType = SCORE_TYPE_WIN;
+		     TryWriteTableScore(ScoreInfoArray);
+		   }
+		}
         //写入库存
         for(WORD i=0; i<GAME_PLAYER; i++)
         {
