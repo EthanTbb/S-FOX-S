@@ -251,12 +251,12 @@ VOID CGameLogic::DeduceWinner(int *nWinMultiple,BYTE *cbDiceValue)
 				analyseResult.m_DiceType[cbRecord].cbCount++;
 				break;
 			}
-		}
 
-		if(analyseResult.cbUnEqualDice==cbRecord)
-		{
-			analyseResult.m_DiceType[analyseResult.cbUnEqualDice].cbDate=cbDiceValue[cbIndex];
-			analyseResult.m_DiceType[analyseResult.cbUnEqualDice++].cbCount++;
+			if (analyseResult.cbUnEqualDice == cbRecord)
+			{
+				analyseResult.m_DiceType[analyseResult.cbUnEqualDice].cbDate = cbDiceValue[cbIndex];
+				analyseResult.m_DiceType[analyseResult.cbUnEqualDice++].cbCount++;
+			}
 		}
 
 		analyseResult.cbAllDiceValue+=cbDiceValue[cbIndex];
