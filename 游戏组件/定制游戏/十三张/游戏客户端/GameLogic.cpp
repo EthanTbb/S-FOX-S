@@ -897,7 +897,7 @@ void CGameLogic::AutoPutCard(BYTE bCardData[], BYTE bPutCardData[], bool bIsAndr
 		}
 
 		//清除标记
-		for(i = 0; i < 3; i ++)
+		for(int i = 0; i < 3; i ++)
 		{
 			blBiaoJi[bSubscript[i]] = false;
 		}	
@@ -2655,54 +2655,54 @@ BYTE CGameLogic::SearchLineCardType( const BYTE cbHandCardData[], BYTE cbHandCar
 			
 			cbTmpLinkCount--;
 		}
-	}
 
-	//特殊顺子
-	if( cbTmpLinkCount >= cbLineCount-1 && cbValueIndex == 13 )
-	{
-		if( Distributing.cbDistributing[0][cbIndexCount] >= cbBlockCount || cbTmpLinkCount >= cbLineCount )
+		//特殊顺子
+		if (cbTmpLinkCount >= cbLineCount - 1 && cbValueIndex == 13)
 		{
-			if( pSearchCardResult == NULL ) return 1;
-
-			ASSERT(cbResultCount < CountArray(pSearchCardResult->cbCardCount));
-			
-			//复制扑克
-			BYTE cbCount = 0;
-			BYTE cbTmpCount = 0;
-			for( BYTE cbIndex = cbValueIndex-cbTmpLinkCount; cbIndex < 13; cbIndex++ )
+			if (Distributing.cbDistributing[0][cbIndexCount] >= cbBlockCount || cbTmpLinkCount >= cbLineCount)
 			{
-				cbTmpCount = 0;
-				for (BYTE cbColorIndex=0;cbColorIndex<4;cbColorIndex++)
-				{
-					for( BYTE cbColorCount = 0; cbColorCount < Distributing.cbDistributing[cbIndex][3-cbColorIndex]; cbColorCount++ )
-					{
-						pSearchCardResult->cbResultCard[cbResultCount][cbCount++]=MakeCardData(cbIndex,3-cbColorIndex);
-						
-						if (++cbTmpCount == cbBlockCount) break;
-					}
-					if (cbTmpCount == cbBlockCount) break;
-				}
-			}
+				if (pSearchCardResult == NULL) return 1;
 
-			//复制A
-			if( Distributing.cbDistributing[0][cbIndexCount] >= cbBlockCount )
-			{
-				cbTmpCount = 0;
-				for (BYTE cbColorIndex=0;cbColorIndex<4;cbColorIndex++)
-				{
-					for( BYTE cbColorCount = 0; cbColorCount < Distributing.cbDistributing[0][3-cbColorIndex]; cbColorCount++ )
-					{
-						pSearchCardResult->cbResultCard[cbResultCount][cbCount++]=MakeCardData(0,3-cbColorIndex);
-						
-						if (++cbTmpCount == cbBlockCount) break;
-					}
-					if (cbTmpCount == cbBlockCount) break;
-				}
-			}
+				ASSERT(cbResultCount < CountArray(pSearchCardResult->cbCardCount));
 
-			//设置变量
-			pSearchCardResult->cbCardCount[cbResultCount] = cbCount;
-			cbResultCount++;
+				//复制扑克
+				BYTE cbCount = 0;
+				BYTE cbTmpCount = 0;
+				for (BYTE cbIndex = cbValueIndex - cbTmpLinkCount; cbIndex < 13; cbIndex++)
+				{
+					cbTmpCount = 0;
+					for (BYTE cbColorIndex = 0; cbColorIndex<4; cbColorIndex++)
+					{
+						for (BYTE cbColorCount = 0; cbColorCount < Distributing.cbDistributing[cbIndex][3 - cbColorIndex]; cbColorCount++)
+						{
+							pSearchCardResult->cbResultCard[cbResultCount][cbCount++] = MakeCardData(cbIndex, 3 - cbColorIndex);
+
+							if (++cbTmpCount == cbBlockCount) break;
+						}
+						if (cbTmpCount == cbBlockCount) break;
+					}
+				}
+
+				//复制A
+				if (Distributing.cbDistributing[0][cbIndexCount] >= cbBlockCount)
+				{
+					cbTmpCount = 0;
+					for (BYTE cbColorIndex = 0; cbColorIndex<4; cbColorIndex++)
+					{
+						for (BYTE cbColorCount = 0; cbColorCount < Distributing.cbDistributing[0][3 - cbColorIndex]; cbColorCount++)
+						{
+							pSearchCardResult->cbResultCard[cbResultCount][cbCount++] = MakeCardData(0, 3 - cbColorIndex);
+
+							if (++cbTmpCount == cbBlockCount) break;
+						}
+						if (cbTmpCount == cbBlockCount) break;
+					}
+				}
+
+				//设置变量
+				pSearchCardResult->cbCardCount[cbResultCount] = cbCount;
+				cbResultCount++;
+			}
 		}
 	}
 	
