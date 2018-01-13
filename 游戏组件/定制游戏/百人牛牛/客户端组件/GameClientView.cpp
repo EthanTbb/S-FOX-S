@@ -14,7 +14,6 @@
 #define IDI_OPENCARD				104									//发牌提示
 #define IDI_MOVECARD_END			105									//移動牌結束
 #define IDI_POSTCARD				106									//发牌提示
-#define IDI_SHOW_ADVANCE_OPENCARD	107									//提前开牌
 
 //按钮标识
 #define IDC_OPTION					225									//设置按钮标识
@@ -77,6 +76,7 @@ CGameClientView::CGameClientView()
 	m_wBankerTime=0;
 	m_lBankerScore=0L;	
 	m_lBankerWinScore=0L;
+	m_lTmpBankerWinScore=0;
 
 	//当局成绩
 	m_lMeCurGameScore=0L;	
@@ -91,7 +91,6 @@ CGameClientView::CGameClientView()
 	m_cbAreaFlash=0xFF;
 	m_wMeChairID=INVALID_CHAIR;
 	m_bShowChangeBanker=false;
-	m_bAdvancedOpenCard = false;
 	m_bNeedSetGameRecord=false;
 	m_bWinTianMen=false;
 	m_bWinHuangMen=false;
@@ -180,6 +179,7 @@ VOID CGameClientView::ResetGameView()
 	m_wBankerTime=0;
 	m_lBankerScore=0L;	
 	m_lBankerWinScore=0L;
+	m_lTmpBankerWinScore=0;
 	m_nShowValleyIndex = 0;
 
 	//当局成绩
@@ -193,7 +193,6 @@ VOID CGameClientView::ResetGameView()
 	m_cbAreaFlash=0xFF;
 	m_wMeChairID=INVALID_CHAIR;
 	m_bShowChangeBanker=false;
-	m_bAdvancedOpenCard = false;
 	m_bNeedSetGameRecord=false;
 	m_bWinTianMen=false;
 	m_bWinHuangMen=false;
@@ -364,7 +363,7 @@ VOID CGameClientView::RectifyControl(INT nWidth, INT nHeight)
 	//开牌按钮
 	DeferWindowPos(hDwp,m_btContinueCard,NULL,LifeWidth+624+290,TopHeight+205+250,0,0,uFlags|SWP_NOSIZE);
 
-	//DeferWindowPos(hDwp,m_btAutoOpenCard,NULL,LifeWidth+624+290,TopHeight+205+285,0,0,uFlags|SWP_NOSIZE);
+	DeferWindowPos(hDwp,m_btAutoOpenCard,NULL,LifeWidth+624+290,TopHeight+205+285,0,0,uFlags|SWP_NOSIZE);
 	DeferWindowPos(hDwp,m_btOpenCard,NULL,LifeWidth+624+290,TopHeight+205+320,0,0,uFlags|SWP_NOSIZE);
 
 	//其他按钮
@@ -588,18 +587,16 @@ void CGameClientView::OnButtonClose()
 	CGameClientEngine *pGameClientEngine=CONTAINING_RECORD(this,CGameClientEngine,m_GameClientView);
 	if (pGameClientEngine->GetGameStatus()!=GAME_STATUS_FREE)
 	{
-		CInformation information;
-		INT nResult = information.ShowMessageBox(TEXT("提示"), TEXT("您正在游戏中，确定要强退吗？"), MB_OKCANCEL);
+		//构造数据
+		CMessageTipDlg GameTips;
 
-		if (1 == nResult)
+		//配置数据
+		if (GameTips.DoModal()==IDOK)
 		{
 			AfxGetMainWnd()->PostMessage(WM_COMMAND,IDC_CLOSE);
-		}
-		else
-		{
+		} 
+		else 
 			return;
-		}
-
 	}
 	else
 		AfxGetMainWnd()->PostMessage(WM_COMMAND,IDC_CLOSE);
@@ -880,14 +877,6 @@ VOID CGameClientView::DrawGameView(CDC * pDC, INT nWidth, INT nHeight)
 		}
 	}
 	
-	//提前开牌
-	if (m_bAdvancedOpenCard)
-	{
-		int	nXPos = (nWidth - m_ImageAdvanceOpenCard.GetWidth()) / 2;
-		int	nYPos = 237;
-		m_ImageAdvanceOpenCard.DrawImage(pDC, nXPos, nYPos);
-	}
-	
 	//发牌提示
 	if (enDispatchCardTip_NULL!=m_enDispatchCardTip)
 	{
@@ -1056,8 +1045,6 @@ int CGameClientView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ImageChangeBanker.LoadImage( hInstance,TEXT("CHANGE_BANKER") );
 	m_ImageNoBanker.LoadImage( hInstance,TEXT("NO_BANKER") );	
 
-	m_ImageAdvanceOpenCard.LoadImage( hInstance,TEXT("ADVANCE_OPENCARD") );	
-
 	m_ImageTimeFlag.LoadImage(hInstance,TEXT("TIME_FLAG"));
 	m_ImageTimeBack.LoadImage( hInstance,TEXT("TIME_BACK"));
 	m_ImageTimeNumber.LoadImage( hInstance,TEXT("TIME_NUMBER"));	
@@ -1100,7 +1087,7 @@ int CGameClientView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_btScoreMoveL.Create(NULL,WS_CHILD|WS_VISIBLE|WS_DISABLED,rcCreate,this,IDC_SCORE_MOVE_L);
 	m_btScoreMoveR.Create(NULL,WS_CHILD|WS_VISIBLE|WS_DISABLED,rcCreate,this,IDC_SCORE_MOVE_R);
 
-	//m_btAutoOpenCard.Create(NULL,WS_CHILD|WS_VISIBLE|WS_DISABLED,rcCreate,this,IDC_AUTO_OPEN_CARD);
+	m_btAutoOpenCard.Create(NULL,WS_CHILD|WS_VISIBLE|WS_DISABLED,rcCreate,this,IDC_AUTO_OPEN_CARD);
 	m_btOpenCard.Create(NULL,WS_CHILD|WS_VISIBLE,rcCreate,this,IDC_OPEN_CARD);
 	m_btOpenCard.ShowWindow(SW_HIDE);
 
@@ -1145,7 +1132,7 @@ int CGameClientView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_btScoreMoveL.SetButtonImage(IDB_BT_SCORE_MOVE_L,hResInstance,false,false);
 	m_btScoreMoveR.SetButtonImage(IDB_BT_SCORE_MOVE_R,hResInstance,false,false);
 
-	//m_btAutoOpenCard.SetButtonImage(IDB_BT_AUTO_OPEN_CARD,hResInstance,false,false);
+	m_btAutoOpenCard.SetButtonImage(IDB_BT_AUTO_OPEN_CARD,hResInstance,false,false);
 	m_btOpenCard.SetButtonImage(IDB_BT_OPEN_CARD,hResInstance,false,false);
 
 	m_btBank.SetButtonImage(IDB_BT_BANK,hResInstance,false,false);
@@ -2082,13 +2069,6 @@ void CGameClientView::OnTimer(UINT nIDEvent)
 
 		return;
 	}
-	//提前开牌
-	else if ( nIDEvent == IDI_SHOW_ADVANCE_OPENCARD )
-	{
-		ShowAdvancedOpenCard(false);
-
-		return;
-	}
 	else if (nIDEvent==IDI_DISPATCH_CARD)
 	{
 
@@ -2412,24 +2392,6 @@ void CGameClientView::ShowChangeBanker( bool bChangeBanker )
 		InvalidGameView(0,0,0,0);
 }
 
-//提前开牌
-void CGameClientView::ShowAdvancedOpenCard(bool bAdvancedOpenCard)
-{
-	if (bAdvancedOpenCard)
-	{
-		SetTimer(IDI_SHOW_ADVANCE_OPENCARD, 3000, NULL);
-		m_bAdvancedOpenCard = true;
-	}
-	else
-	{
-		KillTimer(IDI_SHOW_ADVANCE_OPENCARD);
-		m_bAdvancedOpenCard = false ;
-	}
-
-	//更新界面
-	InvalidGameView(0,0,0,0);
-}
-
 //上庄按钮
 void CGameClientView::OnApplyBanker()
 {
@@ -2520,6 +2482,7 @@ void CGameClientView::SetBankerInfo(DWORD dwBankerUserID, LONGLONG lBankerScore)
 		m_wBankerUser=wBankerUser;
 		m_wBankerTime=0L;
 		m_lBankerWinScore=0L;	
+		m_lTmpBankerWinScore=0L;
 	}
 	m_lBankerScore=lBankerScore;
 }
@@ -2951,8 +2914,6 @@ void CGameClientView::FinishDispatchCard(bool bNotScene)
 	//删除定时器
 	KillTimer(IDI_DISPATCH_CARD);
 
-	SendEngineMessage(IDM_FINISH_DISPATCHCARD,0,0);
-
 	////设置扑克
 	//for (int i=0; i<CountArray(m_CardControl); ++i) m_CardControl[i].SetCardData(m_cbTableCardArray[i],2);
 
@@ -2969,6 +2930,7 @@ void CGameClientView::FinishDispatchCard(bool bNotScene)
 
 	//累计积分
 	m_lMeStatisticScore+=m_lMeCurGameScore;
+	m_lBankerWinScore=m_lTmpBankerWinScore;
 
 	//设置赢家
 	SetWinnerSide(bWinTianMen, bWinDiMen, bWinXuanMen, bWinHuang, true);
@@ -3273,24 +3235,13 @@ void CGameClientView::DrawBankerInfo(CDC *pDC,int nWidth,int nHeight)
 	StrRect.right = StrRect.left + 104;
 	StrRect.bottom = StrRect.top + 15;
 	DrawNumberStringWithSpace(pDC,m_wBankerTime,StrRect);
-	
-	LONGLONG lBankerScore = 0;
-	if ( m_wBankerUser != INVALID_CHAIR && GetClientUserItem(m_wBankerUser) )
-	{
-		IClientUserItem* pClientUserItem = GetClientUserItem(m_wBankerUser);
-		lBankerScore = pClientUserItem->GetUserScore();
-	}
-	else if( m_bEnableSysBanker )
-	{
-		lBankerScore = m_lBankerScore;
-	}
 
 	//庄家总分
 	StrRect.left = 74;
 	StrRect.top = 146;
 	StrRect.right = StrRect.left + 130;
 	StrRect.bottom = StrRect.top + 15;
-	DrawNumberStringWithSpace(pDC,lBankerScore, StrRect);	
+	DrawNumberStringWithSpace(pDC,pUserData==NULL?0:pUserData->lScore, StrRect);	
 }
 
 void CGameClientView::SetFirstShowCard(BYTE bcCard)
@@ -3341,7 +3292,7 @@ void CGameClientView::DrawMeInfo(CDC *pDC,int nWidth,int nHeight)
 		rcDraw.top=120;
 		rcDraw.right=rcDraw.left+128;
 		rcDraw.bottom=rcDraw.top+15;
-		DrawNumberStringWithSpace(pDC,GetClientUserItem(m_wMeChairID)->GetUserScore()-lMeJetton,rcDraw,DT_VCENTER|DT_SINGLELINE|DT_RIGHT|DT_END_ELLIPSIS);
+		DrawNumberStringWithSpace(pDC,pMeUserData->lScore-lMeJetton,rcDraw,DT_VCENTER|DT_SINGLELINE|DT_RIGHT|DT_END_ELLIPSIS);
 	}
 }
 

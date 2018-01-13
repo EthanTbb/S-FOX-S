@@ -51,6 +51,7 @@
 #define IDB_BT_AUTO_OPEN_CARD           241
 #define IDB_BT_OPEN_CARD                242
 #define IDB_BT_CONTINUE_CARD            243
+#define IDD_MESSAGEDLG                  250
 #define IDB_BT_BANK                     251
 #define IDD_BANKTIPS_DLG                252
 #define IDD_OPTION                      253

@@ -52,9 +52,6 @@ public:
 	//开始控制
 	virtual void  GetSuitResult( BYTE cbTableCardArray[][MAX_CARD], BYTE cbTableCard[], LONGLONG lAllJettonScore[] );
 
-	//获取庄家赢牌
-	virtual void  GetBankerWinResult( BYTE cbTableCardArray[][MAX_CARD], BYTE cbTableCard[], LONGLONG lAllJettonScore[] );
-
 	//输赢控制
 protected:
 

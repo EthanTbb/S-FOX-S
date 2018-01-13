@@ -1322,25 +1322,25 @@ WORD CTableFrameSink::EstimateLoser(BYTE cbStartPos, BYTE cbConcludePos)
 			m_GameLogic.SortCardList(cbUserCardData[wLoser]+cbStartPos,cbConcludePos-cbStartPos+1);
 			break;
 		}
-	}
 
-	//对比玩家
-	for (WORD i=(wLoser+1);i<GAME_PLAYER;i++)
-	{
-		//用户过滤
-		if (m_cbPlayStatus[i]==FALSE) continue;
-
-		//排列扑克
-		m_GameLogic.SortCardList(cbUserCardData[i]+cbStartPos,cbConcludePos-cbStartPos+1);
-
-		//对比扑克
-		if (m_GameLogic.CompareCard(cbUserCardData[i]+cbStartPos,cbUserCardData[wLoser]+cbStartPos,cbConcludePos-cbStartPos+1)==false) 
+		//对比玩家
+		for (WORD i = (wLoser + 1); i<GAME_PLAYER; i++)
 		{
-			wLoser=i;
-		}
-	}
+			//用户过滤
+			if (m_cbPlayStatus[i] == FALSE) continue;
 
-	return wLoser;
+			//排列扑克
+			m_GameLogic.SortCardList(cbUserCardData[i] + cbStartPos, cbConcludePos - cbStartPos + 1);
+
+			//对比扑克
+			if (m_GameLogic.CompareCard(cbUserCardData[i] + cbStartPos, cbUserCardData[wLoser] + cbStartPos, cbConcludePos - cbStartPos + 1) == false)
+			{
+				wLoser = i;
+			}
+		}
+
+		return wLoser;
+	}
 }
 
 //推断胜者
@@ -1358,25 +1358,24 @@ WORD CTableFrameSink::EstimateWinner(BYTE cbStartPos, BYTE cbConcludePos)
 			m_GameLogic.SortCardList(cbUserCardData[wWinner]+cbStartPos,cbConcludePos-cbStartPos+1);
 			break;
 		}
-	}
 
-	//对比玩家
-	for (WORD i=(wWinner+1);i<GAME_PLAYER;i++)
-	{
-		//用户过滤
-		if (m_cbPlayStatus[i]==FALSE) continue;
-
-		//排列扑克
-		m_GameLogic.SortCardList(cbUserCardData[i]+cbStartPos,cbConcludePos-cbStartPos+1);
-
-		//对比扑克
-		if (m_GameLogic.CompareCard(cbUserCardData[i]+cbStartPos,cbUserCardData[wWinner]+cbStartPos,cbConcludePos-cbStartPos+1)==true) 
+		//对比玩家
+		for (WORD i = (wWinner + 1); i<GAME_PLAYER; i++)
 		{
-			wWinner=i;
-		}
-	}
+			//用户过滤
+			if (m_cbPlayStatus[i] == FALSE) continue;
 
-	return wWinner;
+			//排列扑克
+			m_GameLogic.SortCardList(cbUserCardData[i] + cbStartPos, cbConcludePos - cbStartPos + 1);
+
+			//对比扑克
+			if (m_GameLogic.CompareCard(cbUserCardData[i] + cbStartPos, cbUserCardData[wWinner] + cbStartPos, cbConcludePos - cbStartPos + 1) == true)
+			{
+				wWinner = i;
+			}
+		}
+		return wWinner;
+	}
 }
 
 //获取信息

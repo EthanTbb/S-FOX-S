@@ -66,15 +66,12 @@
 #pragma comment (lib,"../../../开发库/Lib/Ansi/GameEngine.lib")
 #pragma comment (lib,"../../../开发库/Lib/Ansi/SkinControl.lib")
 #pragma comment (lib,"../../../开发库/Lib/Ansi/ServiceCore.lib")
-#pragma comment (lib,"../../../开发库/Lib/Ansi/ShareControl.lib")
 #else
 #pragma comment (lib,"../../../开发库/Lib/Unicode/WHImage.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/GameFrame.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/GameEngine.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/SkinControl.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/ServiceCore.lib")
-#pragma comment (lib,"../../../开发库/Lib/Unicode/ShareControl.lib")
-
 #endif
 #else
 #ifndef _UNICODE
@@ -83,14 +80,12 @@
 #pragma comment (lib,"../../../开发库/Lib/Ansi/GameEngineD.lib")
 #pragma comment (lib,"../../../开发库/Lib/Ansi/SkinControlD.lib")
 #pragma comment (lib,"../../../开发库/Lib/Ansi/ServiceCoreD.lib")
-#pragma comment (lib,"../../../开发库/Lib/Ansi/ShareControlD.lib")
 #else
 #pragma comment (lib,"../../../开发库/Lib/Unicode/WHImageD.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/GameFrameD.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/GameEngineD.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/SkinControlD.lib")
 #pragma comment (lib,"../../../开发库/Lib/Unicode/ServiceCoreD.lib")
-#pragma comment (lib,"../../../开发库/Lib/Unicode/ShareControlD.lib")
 #endif
 #endif
 

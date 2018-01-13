@@ -9,6 +9,7 @@
 #include "RecordGameList.h"
 #include "ClientControl.h"
 #include "GameLogic.h"
+#include "MessageTipDlg.h"
 #include "SkinListCtrl.h"
 #include "MyEdit.h"
 #include "BankTipsDlg.h"
@@ -27,7 +28,6 @@
 #define IDM_GAME_OPTIONS			WM_USER+205							//游戏设置消息
 #define IDM_CHAT_MESSAGE			WM_USER+206							//游戏聊天消息
 #define IDM_GAME_SOUND				WM_USER+207							//游戏设置
-#define IDM_FINISH_DISPATCHCARD		WM_USER+210							//完成发牌
 #define WM_SET_CAPTION				WM_USER+208							//设置标题
 
 //索引定义
@@ -155,7 +155,6 @@ public:
 	BYTE							m_cbAreaFlash;						//胜利玩家
 	LONGLONG						m_lCurrentJetton;					//当前筹码
 	bool							m_bShowChangeBanker;				//轮换庄家
-	bool							m_bAdvancedOpenCard;				//提前开牌
 	bool							m_bNeedSetGameRecord;				//完成设置
 	bool							m_bWinTianMen;						//胜利标识
 	bool							m_bWinHuangMen;						//胜利标识
@@ -172,6 +171,7 @@ protected:
 	WORD							m_wBankerTime;						//做庄次数
 	LONGLONG						m_lBankerScore;						//庄家积分
 	LONGLONG						m_lBankerWinScore;					//庄家成绩	
+	LONGLONG						m_lTmpBankerWinScore;				//庄家成绩	
 	bool							m_bEnableSysBanker;					//系统做庄
 
 	//当局成绩
@@ -201,7 +201,7 @@ public:
 	CSkinButton						m_btCancelBanker;					//取消庄家
 	CSkinButton						m_btScoreMoveL;						//移动成绩
 	CSkinButton						m_btScoreMoveR;						//移动成绩
-	//CSkinButton						m_btAutoOpenCard;					//自动开牌
+	CSkinButton						m_btAutoOpenCard;					//自动开牌
 	CSkinButton						m_btOpenCard;						//手动开牌
 	CSkinButton						m_btBank;							//银行按钮
 	CSkinButton						m_btContinueCard;					//继续发牌
@@ -277,8 +277,6 @@ protected:
 	CPngImage						m_ImageChangeBanker;				//切换庄家
 	CPngImage						m_ImageNoBanker;					//切换庄家
 
-	CPngImage						m_ImageAdvanceOpenCard;				//提前开牌
-
 	//结束资源
 protected:
 	CPngImage						m_ImageGameEnd;						//成绩图片
@@ -332,7 +330,7 @@ public:
 	//庄家信息
 	void SetBankerInfo(DWORD dwBankerUserID, LONGLONG lBankerScore);
 	//庄家成绩
-	void SetBankerScore(WORD wBankerTime, LONGLONG lWinScore) {m_wBankerTime=wBankerTime; m_lBankerWinScore=lWinScore;}
+	void SetBankerScore(WORD wBankerTime, LONGLONG lWinScore) {m_wBankerTime=wBankerTime; m_lTmpBankerWinScore=lWinScore;}
 	//当局成绩
 	void SetCurGameScore(LONGLONG lMeCurGameScore, LONGLONG lMeCurGameReturnScore, LONGLONG lBankerCurGameScore, LONGLONG lGameRevenue);
 	//设置筹码
@@ -347,8 +345,6 @@ public:
 	void SetGameHistory(bool bWinTian, bool bWinDi, bool bWinXuan,bool bWinHuang);
 	//轮换庄家
 	void ShowChangeBanker( bool bChangeBanker );
-	//提前开牌
-	void ShowAdvancedOpenCard(bool bAdvancedOpenCard);
 	//成绩设置
 	void SetGameScore(LONGLONG lMeCurGameScore, LONGLONG lMeCurGameReturnScore, LONGLONG lBankerCurGameScore);
 	//允许系统做庄

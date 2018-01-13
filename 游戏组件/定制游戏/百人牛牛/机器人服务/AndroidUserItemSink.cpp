@@ -347,10 +347,6 @@ bool  CAndroidUserItemSink::OnEventGameMessage(WORD wSubCmdID, VOID * pBuffer, W
 		{
 			return true;
 		}
-	case SUB_S_ADVANCE_OPENCARD:
-		{
-			return true;
-		}
 	}
 
 	//´íÎó¶ÏÑÔ

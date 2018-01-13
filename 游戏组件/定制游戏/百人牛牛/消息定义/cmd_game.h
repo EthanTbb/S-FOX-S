@@ -186,7 +186,6 @@ typedef CWHArray<tagUserBet,tagUserBet&> CUserBetArray;
 #define SUB_S_AMDIN_COMMAND			110									//管理员命令
 #define SUB_S_UPDATE_STORAGE        111									//更新库存
 #define SUB_S_SEND_USER_BET_INFO    112									//发送下注
-#define SUB_S_ADVANCE_OPENCARD		113									//提前开牌
 
 //更新库存
 struct CMD_S_UpdateStorage
@@ -349,8 +348,6 @@ struct CMD_S_GameStart
 	bool							bContiueCard;						//继续发牌
 	int								nChipRobotCount;					//人数上限 (下注机器人)
 	int								nAndriodApplyCount;					//机器人列表人数
-
-	TCHAR							szServerName[LEN_SERVER];			//房间名称
 };
 
 //用户下注
@@ -397,7 +394,6 @@ struct CMD_S_GameEnd
 #define SUB_C_CONTINUE_CARD			4									//继续发牌
 #define SUB_C_AMDIN_COMMAND			5									//管理员命令
 #define SUB_C_UPDATE_STORAGE        6									//更新库存
-#define SUB_C_CHEATCARD				7									//作弊扑克
 
 //客户端消息
 #define IDM_ADMIN_COMMDN			WM_USER+1000
@@ -446,13 +442,6 @@ struct CMD_C_UpdateStorage
 	LONGLONG						lStorageMax2;					//库存上限2
 	LONGLONG						lStorageMul2;					//系统输分概率2
 };
-
-struct CMD_C_CheatCard
-{
-	bool							bCheat;
-	BYTE							cbCheatTableCardArray[5][5];				//桌面扑克
-};
-
 
 //////////////////////////////////////////////////////////////////////////
 #pragma pack()

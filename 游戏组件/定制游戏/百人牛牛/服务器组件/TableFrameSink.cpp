@@ -85,14 +85,12 @@ CTableFrameSink::CTableFrameSink()
 	//庄家信息
 	m_ApplyUserArray.RemoveAll();
 	m_wCurrentBanker=INVALID_CHAIR;
-	m_wOfflineBanker = INVALID_CHAIR;
 	m_wBankerTime=0;
 	m_lBankerWinScore=0L;		
 	m_lBankerCurGameScore=0L;
 	m_bEnableSysBanker=true;
 	m_cbLeftCardCount=0;
 	m_bContiueCard=false;
-	m_lBankerScore = 0l;
 
 	//记录变量
 	ZeroMemory(m_GameRecordArrary,sizeof(m_GameRecordArrary));
@@ -118,11 +116,6 @@ CTableFrameSink::CTableFrameSink()
 			m_pServerContro = static_cast<IServerControl*>(ServerControl());
 		}
 	}
-
-#ifdef SERVER_CARD_CONFIG
-	ZeroMemory(m_cbCheatTableCardArray, sizeof(m_cbCheatTableCardArray));
-	m_bCheat = false;
-#endif
 
 	return;
 }
@@ -193,8 +186,6 @@ bool CTableFrameSink::Initialization(IUnknownEx * pIUnknownEx)
 //复位桌子
 VOID CTableFrameSink::RepositionSink()
 {
-	m_wOfflineBanker = INVALID_CHAIR;
-
 	//总下注数
 	ZeroMemory(m_lAllJettonScore,sizeof(m_lAllJettonScore));
 
@@ -210,13 +201,6 @@ VOID CTableFrameSink::RepositionSink()
 	m_nChipRobotCount = 0;
 	m_bControl=false;
 	ZeroMemory(m_lRobotAreaScore, sizeof(m_lRobotAreaScore));
-	
-	m_lBankerScore = 0l;
-
-#ifdef SERVER_CARD_CONFIG
-	ZeroMemory(m_cbCheatTableCardArray, sizeof(m_cbCheatTableCardArray));
-	m_bCheat = false;
-#endif
 
 	return;
 }
@@ -272,38 +256,25 @@ bool CTableFrameSink::OnEventGameStart()
 	CString strStorage;
 	CTime Time(CTime::GetCurrentTime());
 	strStorage.Format(TEXT(" 房间: %s | 时间: %d-%d-%d %d:%d:%d | 库存: %I64d \n"), m_pGameServiceOption->szServerName, Time.GetYear(), Time.GetMonth(), Time.GetDay(), Time.GetHour(), Time.GetMinute(), Time.GetSecond(), m_lStorageCurrent );
-
-	CString strFileName;
-	strFileName.Format(TEXT("百人牛牛[%s]库存日志.log"), m_pGameServiceOption->szServerName);
-	WriteInfo(strFileName, strStorage);
+	WriteInfo(TEXT("百人牛牛库存日志.log"), strStorage);
 	
 	//变量定义
 	CMD_S_GameStart GameStart;
 	ZeroMemory(&GameStart,sizeof(GameStart));
 
 	//获取庄家
-	IServerUserItem* pIBankerServerUserItem = NULL;
-	if ( m_wCurrentBanker == INVALID_CHAIR )
+	IServerUserItem *pIBankerServerUserItem=NULL;
+	if (INVALID_CHAIR!=m_wCurrentBanker) 
 	{
-		m_lBankerScore = 1000000000;
-	}
-	else
-	{
-		IServerUserItem* pIBankerServerUserItem = m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
-		if ( pIBankerServerUserItem != NULL )
-		{
-			m_lBankerScore = pIBankerServerUserItem->GetUserScore();
-		}
+		pIBankerServerUserItem=m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
+		m_lBankerScore=pIBankerServerUserItem->GetUserScore();
 	}
 
 	//设置变量
 	GameStart.cbTimeLeave=m_nPlaceJettonTime;
 	GameStart.wBankerUser=m_wCurrentBanker;
-	GameStart.lBankerScore=m_lBankerScore;
+	if (pIBankerServerUserItem!=NULL) GameStart.lBankerScore=m_lBankerScore;
 	GameStart.bContiueCard=m_bContiueCard;
-	
-	CopyMemory(GameStart.szServerName, m_pGameServiceOption->szServerName, sizeof(GameStart.szServerName));
-	
 
 	//下注机器人数量
 	int nChipRobotCount = 0;
@@ -367,76 +338,8 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
 			}
 			else
 			{	
-				//系统坐庄和机器人坐庄优化库存
-				if ((m_wCurrentBanker == INVALID_CHAIR && m_bEnableSysBanker == true)
-				 || (m_wCurrentBanker != INVALID_CHAIR && m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() == true))
-				{
-					StorageOptimize();
-				}	
-				else if (m_wCurrentBanker != INVALID_CHAIR && m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() == false)
-				{
-					//循环计数
-					LONGLONG lCirculateCount = 0L;
-					while(true)
-					{
-						if (lCirculateCount > 10000)
-						{
-							break;
-						}
-
-						//真人玩家得分
-						LONGLONG lRealPlayerWinScore = CalRealPlayerBankerScore();
-
-						//真人玩家输钱
-						if (lRealPlayerWinScore <= 0)
-						{
-							break;
-						}
-						else		//真人玩家赢钱
-						{
-							if (m_lStorageCurrent - lRealPlayerWinScore  <= 0)
-							{
-								DispatchTableCard();
-								lCirculateCount++;
-								continue;
-							}
-
-							//检验最大赔付比例
-							LONGLONG lStorageCurrent = m_lStorageCurrent - lRealPlayerWinScore;
-							double llCompensateRadio = (double)((double)30 / (double)100);
-							if (m_lStorageCurrent * (1 - llCompensateRadio) >= lStorageCurrent)
-							{
-								DispatchTableCard();
-								lCirculateCount++;
-								continue;
-							}
-
-							//判断条件
-							if (((m_lStorageCurrent > m_lStorageMax1) && (rand()%100 < m_lStorageMul1))
-								|| ((m_lStorageCurrent > m_lStorageMax2) && (rand()%100 < m_lStorageMul2))
-								|| rand() % 100 < 45)
-							{
-								break;
-							}
-							else
-							{
-								DispatchTableCard();
-								lCirculateCount++;
-								continue;
-							}
-						}
-					}
-					
-				}
+				StorageOptimize();		
 			}
-
-#ifdef SERVER_CARD_CONFIG
-
-			if (m_bCheat == true)
-			{
-				CopyMemory(m_cbTableCardArray, m_cbCheatTableCardArray, sizeof(m_cbTableCardArray));
-			}			
-#endif
 
 			//计算分数
 			LONGLONG lBankerWinScore=CalculateScore();
@@ -480,179 +383,7 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
 				m_pITableFrame->SendTableData(wUserIndex,SUB_S_GAME_END,&GameEnd,sizeof(GameEnd));
 				m_pITableFrame->SendLookonData(wUserIndex,SUB_S_GAME_END,&GameEnd,sizeof(GameEnd));
 			}
-		
-			CString strJetton;
-			CString strArea;
-			for (WORD i=0; i<GAME_PLAYER; i++)
-			{
-				strJetton = TEXT("");
-				
-				IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem(i);
-				if (pIServerUserItem == NULL) 
-				{
-					continue;
-				}
-				if (pIServerUserItem->IsAndroidUser() == true)
-				{
-					continue;
-				}
-				
-				bool bJetton = false;
-				for (WORD wAreaIndex=1; wAreaIndex<AREA_COUNT+1; wAreaIndex++)
-				{
-					strArea = TEXT("");
-					if (m_lUserJettonScore[wAreaIndex][i] == 0)
-					{
-						continue;
-					}
-					switch(wAreaIndex)
-					{
-					case 1:
-						{
-							strArea.Format(TEXT("东 ：%I64d "), m_lUserJettonScore[wAreaIndex][i]);
-							break;
-						}
-					case 2:
-						{
-							strArea.Format(TEXT("南 ：%I64d "), m_lUserJettonScore[wAreaIndex][i]);
-							break;
-						}
-					case 3:
-						{
-							strArea.Format(TEXT("西 ：%I64d "), m_lUserJettonScore[wAreaIndex][i]);
-							break;
-						}
-					case 4:
-						{
-							strArea.Format(TEXT("北 ：%I64d "), m_lUserJettonScore[wAreaIndex][i]);
-							break;
-						}
-					default:
-						ASSERT(false);
-					}
-					
-					strJetton += strArea;
-					bJetton = true;
-				}
-				
-				if (bJetton == true)
-				{
-					CString strControlInfo;
-					CTime Time(CTime::GetCurrentTime());
-					strControlInfo.Format(TEXT("房间: %s | 时间: %d-%d-%d %d:%d:%d\n 昵称: %s --得分为:%I64d  ////"),
-						m_pGameServiceOption->szServerName, Time.GetYear(), Time.GetMonth(), Time.GetDay(),
-						Time.GetHour(), Time.GetMinute(), Time.GetSecond(), pIServerUserItem->GetNickName(), m_lUserWinScore[i]);
-					
-					strControlInfo += strJetton;
-					strControlInfo += TEXT("\n");
 
-					CString strFileName;
-					strFileName.Format(TEXT("百人牛牛[%s]下注 信息.log"), m_pGameServiceOption->szServerName);
-
-					WriteInfo(strFileName, strControlInfo);
-				}
-
-			}
-			
-			if (NeedDeductStorage())
-			{
-				CString strtype;
-				CString strtip;
-				CString strCardInfo;
-				BYTE cbCardType[5];
-				ZeroMemory(cbCardType, sizeof(cbCardType));
-				for(int i = 0;i<AREA_COUNT+1;i++) 
-				{
-					strtype = TEXT("");
-					BYTE bcTmp[5];
-					cbCardType[i] = m_GameLogic.GetCardType(m_cbTableCardArray[i],5,bcTmp);
-					strCardInfo = TEXT("");
-					switch(i)
-					{
-					case 0:
-						{
-							strtype.Format(TEXT("庄【%d】//"), cbCardType[i]);
-							for (WORD wCardIndex=0; wCardIndex<5; wCardIndex++)
-							{
-								strtype += GetCardInfo(m_cbTableCardArray[i][wCardIndex]);
-							}
-							strtype += TEXT("////////");
-							break;
-						}
-					case 1:
-						{
-							strtype.Format(TEXT("东【%d】//"), cbCardType[i]);
-							for (WORD wCardIndex=0; wCardIndex<5; wCardIndex++)
-							{
-								strtype += GetCardInfo(m_cbTableCardArray[i][wCardIndex]);
-							}
-							strtype += TEXT("////////");
-							break;
-						}
-					case 2:
-						{
-							strtype.Format(TEXT("南【%d】//"), cbCardType[i]);
-							for (WORD wCardIndex=0; wCardIndex<5; wCardIndex++)
-							{
-								strtype += GetCardInfo(m_cbTableCardArray[i][wCardIndex]);
-							}
-							strtype += TEXT("////////");
-							break;
-						}
-					case 3:
-						{
-							strtype.Format(TEXT("西【%d】//"), cbCardType[i]);
-							for (WORD wCardIndex=0; wCardIndex<5; wCardIndex++)
-							{
-								strtype += GetCardInfo(m_cbTableCardArray[i][wCardIndex]);
-							}
-							strtype += TEXT("////////");
-							break;
-						}
-					case 4:
-						{
-							strtype.Format(TEXT("北【%d】//"), cbCardType[i]);
-							for (WORD wCardIndex=0; wCardIndex<5; wCardIndex++)
-							{
-								strtype += GetCardInfo(m_cbTableCardArray[i][wCardIndex]);
-							}
-							strtype += TEXT("////////");
-							break;
-						}
-					default:
-						ASSERT(false);
-					}
-					
-					strtip += strtype;
-				}
-				
-				CString strFileName;
-				strFileName.Format(TEXT("百人牛牛[%s]下注 信息.log"), m_pGameServiceOption->szServerName);
-
-				WriteInfo(strFileName, strtip);
-
-				if ((m_wCurrentBanker == INVALID_CHAIR && m_bEnableSysBanker == true)
-					|| (m_wCurrentBanker != INVALID_CHAIR && m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() == true))
-				{
-
-					CString strControlInfo;
-					strControlInfo.Format(TEXT("当局系统或者机器人坐庄，真人得分为 = %I64d \n"), CalSysOrAndroidBankerScore());
-					
-					WriteInfo(strFileName, strControlInfo);
-					WriteInfo(strFileName, TEXT("\n"));
-				}	
-				else if (m_wCurrentBanker != INVALID_CHAIR && m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() == false)
-				{
-					CString strControlInfo;
-					strControlInfo.Format(TEXT("当局真人坐庄，真人得分为 = %I64d \n"), CalRealPlayerBankerScore());
-
-					WriteInfo(strFileName, strControlInfo);
-					WriteInfo(strFileName, TEXT("\n"));
-				}
-
-
-			}
-			
 			return true;
 		}
 	case GER_USER_LEAVE:		//用户离开
@@ -702,7 +433,7 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
 						ZeroMemory(ScoreInfo,sizeof(ScoreInfo));
 						//库存金币
 						if (!pIServerUserItem->IsAndroidUser())
-							m_lStorageCurrent -= (m_lUserWinScore[wChairID]);						
+							m_lStorageCurrent -= (m_lUserWinScore[wChairID]+m_lUserRevenue[wChairID]);						
 						ScoreInfo[wChairID].lScore = m_lUserWinScore[wChairID];
 						ScoreInfo[wChairID].cbType=m_lUserWinScore[wChairID]>0?SCORE_TYPE_WIN:SCORE_TYPE_LOSE;
 						ScoreInfo[wChairID].lRevenue = m_lUserRevenue[wChairID];
@@ -796,7 +527,7 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
 			//库存金币
 			IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
 			if (pIServerUserItem != NULL && !pIServerUserItem->IsAndroidUser())
-				m_lStorageCurrent -= (m_lUserWinScore[m_wCurrentBanker]);
+				m_lStorageCurrent -= (m_lUserWinScore[m_wCurrentBanker]+m_lUserRevenue[m_wCurrentBanker]);
 
 			m_lUserWinScore[m_wCurrentBanker] = 0;
 
@@ -833,22 +564,11 @@ bool CTableFrameSink::OnEventSendGameScene(WORD wChairID, IServerUserItem * pISe
 			StatusFree.wBankerUser=m_wCurrentBanker;	
 			StatusFree.cbBankerTime=m_wBankerTime;
 			StatusFree.lBankerWinScore=m_lBankerWinScore;
-			//获取庄家
-			IServerUserItem* pIBankerServerUserItem = NULL;
-			if ( m_wCurrentBanker == INVALID_CHAIR )
+			if (m_wCurrentBanker!=INVALID_CHAIR)
 			{
-				m_lBankerScore = 1000000000;
+				IServerUserItem *pIServerUserItem=m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
+				StatusFree.lBankerScore=pIServerUserItem->GetUserScore();
 			}
-			else
-			{
-				IServerUserItem* pIBankerServerUserItem = m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
-				if ( pIBankerServerUserItem != NULL )
-				{
-					m_lBankerScore = pIBankerServerUserItem->GetUserScore();
-				}
-			}
-
-			StatusFree.lBankerScore = m_lBankerScore;
 			StatusFree.nEndGameMul = m_nEndGameMul;
 
 			//玩家信息
@@ -937,22 +657,10 @@ bool CTableFrameSink::OnEventSendGameScene(WORD wChairID, IServerUserItem * pISe
 			StatusPlay.wBankerUser=m_wCurrentBanker;			
 			StatusPlay.cbBankerTime=m_wBankerTime;
 			StatusPlay.lBankerWinScore=m_lBankerWinScore;	
-			//获取庄家
-			IServerUserItem* pIBankerServerUserItem = NULL;
-			if ( m_wCurrentBanker == INVALID_CHAIR )
+			if (m_wCurrentBanker!=INVALID_CHAIR)
 			{
-				m_lBankerScore = 1000000000;
-			}
-			else
-			{
-				IServerUserItem* pIBankerServerUserItem = m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
-				if ( pIBankerServerUserItem != NULL )
-				{
-					m_lBankerScore = pIBankerServerUserItem->GetUserScore();
-				}
-			}
-
-			StatusPlay.lBankerScore = m_lBankerScore;
+				StatusPlay.lBankerScore=m_lBankerScore;
+			}	
 			StatusPlay.nEndGameMul = m_nEndGameMul;
 
 			//全局信息
@@ -1097,7 +805,7 @@ bool CTableFrameSink::OnTimerMessage(DWORD wTimerID, WPARAM wBindParam)
 				//库存金币
 				if (!pIServerUserItem->IsAndroidUser())
 				{
-					m_lStorageCurrent -= (m_lUserWinScore[wUserChairID]);					
+					m_lStorageCurrent -= (m_lUserWinScore[wUserChairID]+m_lUserRevenue[wUserChairID]);					
 				}
 			}
 			
@@ -1112,6 +820,12 @@ bool CTableFrameSink::OnTimerMessage(DWORD wTimerID, WPARAM wBindParam)
 			if (m_lStorageCurrent > 0)
 				m_lStorageCurrent = m_lStorageCurrent - m_lStorageCurrent*lTempDeduct/1000;
 
+			//结束游戏
+			m_pITableFrame->ConcludeGame(GAME_SCENE_FREE);
+
+			//切换庄家
+			ChangeBanker(false);
+
 			//设置时间
 			m_dwJettonTime=(DWORD)time(NULL);
 			m_pITableFrame->SetGameTimer(IDI_FREE,m_nFreeTime*1000,1,0L);
@@ -1125,12 +839,6 @@ bool CTableFrameSink::OnTimerMessage(DWORD wTimerID, WPARAM wBindParam)
 			m_pITableFrame->SendTableData(INVALID_CHAIR,SUB_S_GAME_FREE,&GameFree,sizeof(GameFree));
 			m_pITableFrame->SendLookonData(INVALID_CHAIR,SUB_S_GAME_FREE,&GameFree,sizeof(GameFree));
 			
-			//结束游戏
-			m_pITableFrame->ConcludeGame(GAME_SCENE_FREE);
-			
-			//切换庄家
-			ChangeBanker(false);
-
 			//更新库存信息
 			for ( WORD wUserID = 0; wUserID < GAME_PLAYER; ++wUserID )
 			{
@@ -1253,11 +961,8 @@ bool CTableFrameSink::OnGameMessage(WORD wSubCmdID, VOID * pData, WORD wDataSize
 				strControlInfo.Format(TEXT("房间: %s | 桌号: %u | 时间: %d-%d-%d %d:%d:%d\n控制人账号: %s | 控制人ID: %u\n%s\r\n"),
 					m_pGameServiceOption->szServerName, m_pITableFrame->GetTableID()+1, Time.GetYear(), Time.GetMonth(), Time.GetDay(),
 					Time.GetHour(), Time.GetMinute(), Time.GetSecond(), pIServerUserItem->GetNickName(), pIServerUserItem->GetGameID(), str);
-				
-				CString strFileName;
-				strFileName.Format(TEXT("百人牛牛[%s]控制信息.log"), m_pGameServiceOption->szServerName);
 
-				WriteInfo(strFileName, strControlInfo);
+				WriteInfo(TEXT("百人牛牛控制信息.log"),strControlInfo);
 			}
 			
 			for(WORD wUserID = 0; wUserID < GAME_PLAYER; wUserID++)
@@ -1293,19 +998,6 @@ bool CTableFrameSink::OnGameMessage(WORD wSubCmdID, VOID * pData, WORD wDataSize
 
 			return true;
 		}
-	case SUB_C_CHEATCARD:
-		{
-			ASSERT(wDataSize==sizeof(CMD_C_CheatCard));
-			if(wDataSize!=sizeof(CMD_C_CheatCard)) return false;
-
-			//消息处理
-			CMD_C_CheatCard * pCheatCard=(CMD_C_CheatCard *)pData;
-
-			CopyMemory(m_cbCheatTableCardArray, pCheatCard->cbCheatTableCardArray, sizeof(m_cbCheatTableCardArray));
-			m_bCheat = pCheatCard->bCheat;
-
-			return true;
-		}
 	}
 
 	return false;
@@ -1319,12 +1011,6 @@ bool CTableFrameSink::OnFrameMessage(WORD wSubCmdID, VOID * pData, WORD wDataSiz
 
 bool CTableFrameSink::OnActionUserOffLine(WORD wChairID,IServerUserItem * pIServerUserItem)
 {
-	//离线庄家
-	if (wChairID == m_wCurrentBanker && pIServerUserItem->IsAndroidUser() == false)
-	{
-		m_wOfflineBanker = wChairID;
-	}
-
 	if(pIServerUserItem == NULL) return false;
 	//切换庄家
 	if (wChairID==m_wCurrentBanker) ChangeBanker(true);
@@ -1350,23 +1036,6 @@ bool CTableFrameSink::OnActionUserOffLine(WORD wChairID,IServerUserItem * pIServ
 
 		break;
 	}
-	CString strbanker;
-	if (m_wCurrentBanker == INVALID_CHAIR)
-	{
-		strbanker = TEXT("系统坐庄 ");
-	}
-	else
-	{
-		strbanker = m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() ? TEXT("机器人坐庄 ") : TEXT("真人坐庄 ");
-	}
-
-	CString strDebug;
-	CTime Time(CTime::GetCurrentTime());
-	strDebug.Format(TEXT("掉线玩家昵称[%s], %s| 时间: %d-%d-%d %d:%d:%d | 库存: %I64d \n"),  pIServerUserItem->GetNickName(), strbanker, Time.GetYear(), Time.GetMonth(), Time.GetDay(), Time.GetHour(), Time.GetMinute(), Time.GetSecond(), m_lStorageCurrent );
-
-	CString strFileName;
-	strFileName.Format(TEXT("百人牛牛[%s]掉线日志.log"), m_pGameServiceOption->szServerName);
-	WriteInfo(strFileName, strDebug);
 
 	return true;
 
@@ -1560,10 +1229,17 @@ bool CTableFrameSink::OnUserPlaceJetton(WORD wChairID, BYTE cbJettonArea, LONGLO
 			PlaceJetton.wChairID=wChairID;
 			PlaceJetton.cbJettonArea=cbJettonArea;
 			PlaceJetton.lJettonScore=lJettonScore;
-			
-			PlaceJetton.bIsAndroid = m_pITableFrame->GetTableUserItem(wChairID)->IsAndroidUser();
-			PlaceJetton.bAndroid = m_pITableFrame->GetTableUserItem(wChairID)->IsAndroidUser();
 
+			if(bIsGameCheatUser || i == wChairID)
+			{
+				PlaceJetton.bIsAndroid=pIServerUserItem->IsAndroidUser();
+				PlaceJetton.bAndroid=pIServerUserItem->IsAndroidUser()?TRUE:FALSE;
+			}
+			else
+			{
+				PlaceJetton.bIsAndroid=true;
+				PlaceJetton.bAndroid=true;
+			}
 
 			//发送消息
 			m_pITableFrame->SendTableData(i,SUB_S_PLACE_JETTON,&PlaceJetton,sizeof(PlaceJetton));
@@ -1591,23 +1267,6 @@ bool CTableFrameSink::OnUserPlaceJetton(WORD wChairID, BYTE cbJettonArea, LONGLO
 			{
 				if (m_pITableFrame->GetGameStatus()!=GAME_SCENE_GAME_END)
 				{
-					for(WORD i=0; i<GAME_PLAYER; i++)
-					{
-						IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem(i);
-						if (pIServerUserItem == NULL) 
-						{
-							continue;
-						}
-						if (pIServerUserItem->IsAndroidUser())
-						{
-							continue;
-						}
-						//发送消息
-						m_pITableFrame->SendTableData(i, SUB_S_ADVANCE_OPENCARD);
-						m_pITableFrame->SendLookonData(i, SUB_S_ADVANCE_OPENCARD);
-					}
-
-
 					//设置状态
 					m_pITableFrame->SetGameStatus(GAME_SCENE_GAME_END);			
 
@@ -1616,7 +1275,7 @@ bool CTableFrameSink::OnUserPlaceJetton(WORD wChairID, BYTE cbJettonArea, LONGLO
 
 					//设置时间
 					m_dwJettonTime=(DWORD)time(NULL);
-					m_pITableFrame->SetGameTimer(IDI_GAME_END,m_nGameEndTime*1000,1,0L);	
+					m_pITableFrame->SetGameTimer(IDI_GAME_END,m_nGameEndTime*1000,1,0L);			
 				}
 			}
 		}
@@ -2004,11 +1663,6 @@ bool CTableFrameSink::ChangeBanker(bool bCancelCurrentBanker)
 			IServerUserItem *pIServerUserItem=m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
 			ChangeBanker.lBankerScore=pIServerUserItem->GetUserScore();
 		}
-		else
-		{
-			ChangeBanker.lBankerScore = 1000000000;
-		}
-
 		m_pITableFrame->SendTableData(INVALID_CHAIR,SUB_S_CHANGE_BANKER,&ChangeBanker,sizeof(ChangeBanker));
 		m_pITableFrame->SendLookonData(INVALID_CHAIR,SUB_S_CHANGE_BANKER,&ChangeBanker,sizeof(ChangeBanker));
 
@@ -2136,7 +1790,9 @@ LONGLONG CTableFrameSink::GetUserMaxJetton(WORD wChairID, BYTE cbJettonArea)
 	for (int nAreaIndex=1; nAreaIndex<=AREA_COUNT; ++nAreaIndex) lNowJetton += m_lUserJettonScore[nAreaIndex][wChairID];
 
 	//庄家金币
-	LONGLONG lBankerScore=m_lBankerScore*m_nEndGameMul/100;;
+	LONGLONG lBankerScore=2147483647;
+	if (m_wCurrentBanker!=INVALID_CHAIR)
+		lBankerScore=m_lBankerScore*m_nEndGameMul/100;
 	for (int nAreaIndex=1; nAreaIndex<=AREA_COUNT; ++nAreaIndex) lBankerScore-=m_lAllJettonScore[nAreaIndex]*iTimer;
 
 	//区域金币
@@ -2276,21 +1932,6 @@ LONGLONG CTableFrameSink::CalculateScore()
 		}	
 	}
 
-	//离线庄家成绩
-	if (m_wOfflineBanker!=INVALID_CHAIR)
-	{
-		m_lUserWinScore[m_wOfflineBanker] = lBankerWinScore;
-
-		//计算税收
-		if (0 < m_lUserWinScore[m_wOfflineBanker])
-		{
-			double fRevenuePer=double(wRevenue/1000.0);
-			m_lUserRevenue[m_wOfflineBanker]  = LONGLONG(m_lUserWinScore[m_wOfflineBanker]*fRevenuePer);
-			m_lUserWinScore[m_wOfflineBanker] -= m_lUserRevenue[m_wOfflineBanker];
-			lBankerWinScore = m_lUserWinScore[m_wOfflineBanker];
-		}	
-	}
-
 	//累计积分
 	m_lBankerWinScore += lBankerWinScore;
 
@@ -2308,61 +1949,6 @@ void CTableFrameSink::DeduceWinner(bool &bWinTian, bool &bWinDi, bool &bWinXuan,
 	bWinDi=m_GameLogic.CompareCard(m_cbTableCardArray[BANKER_INDEX],5,m_cbTableCardArray[DUI_MEN_INDEX],5,diMultiple)==1?true:false;
 	bWinXuan=m_GameLogic.CompareCard(m_cbTableCardArray[BANKER_INDEX],5,m_cbTableCardArray[DAO_MEN_INDEX],5,TianXuanltiple)==1?true:false;
 	bWinHuan=m_GameLogic.CompareCard(m_cbTableCardArray[BANKER_INDEX],5,m_cbTableCardArray[HUAN_MEN_INDEX],5,HuangMultiple)==1?true:false;
-}
-
-//获取牌信息
-CString CTableFrameSink::GetCardInfo(BYTE cbCardData)
-{
-	CString strInfo;
-
-	if (cbCardData == 0x41)
-	{
-		strInfo += TEXT("[小王 ");
-	}
-	else if (cbCardData == 0x42)
-	{
-		strInfo += TEXT("[大王 ");
-	}
-	else
-	{
-		if( (cbCardData&LOGIC_MASK_COLOR) == 0x00 )
-			strInfo += TEXT("[方块 ");
-		else if( (cbCardData&LOGIC_MASK_COLOR) == 0x10 )
-			strInfo += TEXT("[梅花 ");
-		else if( (cbCardData&LOGIC_MASK_COLOR) == 0x20 )
-			strInfo += TEXT("[红桃 ");
-		else if( (cbCardData&LOGIC_MASK_COLOR) == 0x30 )
-			strInfo += TEXT("[黑桃 ");
-
-		if( (cbCardData&LOGIC_MASK_VALUE) == 0x01 )
-			strInfo += TEXT("A] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x02 )
-			strInfo += TEXT("2] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x03 )
-			strInfo += TEXT("3] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x04 )
-			strInfo += TEXT("4] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x05 )
-			strInfo += TEXT("5] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x06 )
-			strInfo += TEXT("6] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x07 )
-			strInfo += TEXT("7] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x08 )
-			strInfo += TEXT("8] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x09 )
-			strInfo += TEXT("9] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x0A )
-			strInfo += TEXT("10] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x0B )
-			strInfo += TEXT("J] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x0C )
-			strInfo += TEXT("Q] ");
-		else if( (cbCardData&LOGIC_MASK_VALUE) == 0x0D )
-			strInfo += TEXT("K] ");
-	}
-
-	return strInfo;
 }
 
 //发送记录
@@ -2471,192 +2057,196 @@ void CTableFrameSink::ReadConfigInformation()
 // 库存优化
 VOID CTableFrameSink::StorageOptimize()
 {
-	bool blRealPlayerWin = true;
-	if (((m_lStorageCurrent > m_lStorageMax1) && (rand()%100 < m_lStorageMul1))
-		|| ((m_lStorageCurrent > m_lStorageMax2) && (rand()%100 < m_lStorageMul2))
-		|| rand() % 100 < 30)
+	// 获取系统输赢
+	LONGLONG lSystemScore = 0;
+	bool bAllEat = false;
+	JudgeSystemScore(m_cbTableCardArray, lSystemScore, bAllEat);
+
+	// 系统输钱
+	if( lSystemScore < 0 )
 	{
-		blRealPlayerWin = true;
+		// 够钱
+		if( m_lStorageCurrent > -lSystemScore )
+		{
+			return;
+		}
+
+		// 不够钱, 让系统赢钱
+
+		// 交换后系统输赢
+		LONGLONG lExchangeMoney[4] = { 0, 0, 0, 0 };
+		bool bAllEat[4] = { true, true, true, true };
+
+		// 庄家牌
+		BYTE bBankerCardData[5] = {0};
+		CopyMemory(bBankerCardData, m_cbTableCardArray[0], sizeof(bBankerCardData));
+
+		// 交换牌
+		for( int nExchange = 0; nExchange < 4; ++nExchange )
+		{
+			BYTE bExchangeData[5][5] = {0};
+			CopyMemory(bExchangeData, m_cbTableCardArray, sizeof(bExchangeData));
+			CopyMemory(bExchangeData[0], m_cbTableCardArray[nExchange + 1], sizeof(BYTE) * 5);
+			CopyMemory(bExchangeData[nExchange + 1], bBankerCardData, sizeof(BYTE) * 5);
+
+			JudgeSystemScore(bExchangeData, lExchangeMoney[nExchange], bAllEat[nExchange]);
+		}
+
+		// 获取系统是赢
+		int nOkInedex = -1;
+		for( int nOk = 0; nOk < 4; ++nOk )
+		{
+			if( lExchangeMoney[nOk] > 0 )
+			{
+				nOkInedex = nOk;
+
+				// 如果这个不是通吃， 直接返回
+				if( !bAllEat[nOk] )
+					break;
+			}
+		}
+
+		// 查找到队列
+		if( nOkInedex != -1 )
+		{
+			//交换手牌
+			BYTE bTempCardData[5] = {0};
+			CopyMemory(bTempCardData,					m_cbTableCardArray[0],				sizeof(bTempCardData));
+			CopyMemory(m_cbTableCardArray[0],			m_cbTableCardArray[nOkInedex + 1],		sizeof(bTempCardData));
+			CopyMemory(m_cbTableCardArray[nOkInedex + 1],	bTempCardData,						sizeof(bTempCardData));
+		}
+
+		return;
+	}
+	// 系统赢钱
+	else
+	{
+		// 如果现在系统大于库存最大值， 那就让玩家赢钱
+		if( (m_lStorageCurrent > m_lStorageMax1 && m_lStorageCurrent <= m_lStorageMax2 && rand()%100 <= m_lStorageMul1) ||
+			(m_lStorageCurrent > m_lStorageMax2 && rand()%100 <= m_lStorageMul2))
+		{
+			// 交换后系统输赢
+			LONGLONG lExchangeMoney[4] = { 0, 0, 0, 0 };
+			bool bAllEat[4] = { true, true, true, true };
+
+			// 庄家牌
+			BYTE bBankerCardData[5] = {0};
+			CopyMemory(bBankerCardData, m_cbTableCardArray[0], sizeof(bBankerCardData));
+
+			// 交换牌
+			for( int nExchange = 0; nExchange < 4; ++nExchange )
+			{
+				BYTE bExchangeData[5][5] = {0};
+				CopyMemory(bExchangeData, m_cbTableCardArray, sizeof(bExchangeData));
+				CopyMemory(bExchangeData[0], m_cbTableCardArray[nExchange + 1], sizeof(BYTE) * 5);
+				CopyMemory(bExchangeData[nExchange + 1], bBankerCardData, sizeof(BYTE) * 5);
+
+				JudgeSystemScore(bExchangeData, lExchangeMoney[nExchange], bAllEat[nExchange]);
+			}
+
+			// 获取系统是输，但是输的最少的牌
+			int nOkInedex = -1;
+			LONGLONG nOkMonye = LLONG_MIN;
+			for( int nOk = 0; nOk < 4; ++nOk )
+			{
+				if( lExchangeMoney[nOk] < 0 && nOkMonye < lExchangeMoney[nOk] && (-lExchangeMoney[nOk]) < m_lStorageCurrent)
+				{
+					nOkMonye = lExchangeMoney[nOk];
+					nOkInedex = nOk;
+
+					// 如果这个不是通吃， 直接返回
+					if( !bAllEat[nOk] )
+						break;
+				}
+			}
+
+			// 查找到队列
+			if( nOkInedex != -1 )
+			{
+				//交换手牌
+				BYTE bTempCardData[5] = {0};
+				CopyMemory(bTempCardData,					m_cbTableCardArray[0],				sizeof(bTempCardData));
+				CopyMemory(m_cbTableCardArray[0],			m_cbTableCardArray[nOkInedex + 1],		sizeof(bTempCardData));
+				CopyMemory(m_cbTableCardArray[nOkInedex + 1],	bTempCardData,						sizeof(bTempCardData));
+			}
+		}
+		return;
+	}
+}
+
+// 判断系统得分
+void CTableFrameSink::JudgeSystemScore(BYTE bCardData[5][5], LONGLONG& lSystemScore, bool& bAllEat )
+{
+	// 系统输赢
+	bAllEat = true;
+	lSystemScore = 0l;
+
+	//系统坐庄
+	bool bSystemBanker = false;
+	if ( m_wCurrentBanker == INVALID_CHAIR )
+	{
+		bSystemBanker = true;
 	}
 	else
 	{
-		blRealPlayerWin = false;
+		IServerUserItem *pServerUserItem = m_pITableFrame->GetTableUserItem(m_wCurrentBanker);
+		if ( pServerUserItem != NULL )	
+			bSystemBanker = pServerUserItem->IsAndroidUser();
 	}
 
-	LONGLONG lCirculateCount = 0L;
-
-	while(true)
-	{
-		//真人玩家得分
-		LONGLONG lRealPlayerWinScore = CalSysOrAndroidBankerScore();
-
-		if (lCirculateCount > 10000)
-		{
-			//blRealPlayerWin = false;
-			
-			if (m_lStorageCurrent - lRealPlayerWinScore < 0 /*&& blRealPlayerWin == true*/)
-			{
-				blRealPlayerWin = false;
-				lCirculateCount = 0;
-				DispatchTableCard();
-				continue;
-			}
-
-			break;
-		}
-
-		//库存不能为负数
-		if (m_lStorageCurrent - lRealPlayerWinScore  <= 0)
-		{
-			DispatchTableCard();
-			lCirculateCount++;
-			continue;
-		}
-
-		//检验最大赔付比例
-		LONGLONG lStorageCurrent = m_lStorageCurrent - lRealPlayerWinScore;
-		double llCompensateRadio = (double)((double)30 / (double)100);
-		if (m_lStorageCurrent * (1 - llCompensateRadio) >= lStorageCurrent)
-		{
-			DispatchTableCard();
-			lCirculateCount++;
-			continue;
-		}
-
-		//真人玩家输钱
-		if (lRealPlayerWinScore <= 0 && blRealPlayerWin == false)
-		{
-			break;
-		}
-		
-		if (lRealPlayerWinScore >= 0 && blRealPlayerWin == true)
-		{
-			break;
-		}
-		
-		DispatchTableCard();
-		lCirculateCount++;
-	}
-	
-	//庄家赢牌
-	if (m_lStorageCurrent - CalSysOrAndroidBankerScore()<0)
-	{
-		CString strFileName;
-		strFileName.Format(TEXT("百人牛牛[%s]下注 信息.log"), m_pGameServiceOption->szServerName);
-
-		WriteInfo(strFileName, TEXT("庄家赢牌"));
-
-		m_pServerContro->GetBankerWinResult(m_cbTableCardArray, m_cbTableCard, m_lAllJettonScore);
-	}
-}
-
-//计算系统及机器人坐庄时真人玩家得分
-LONGLONG CTableFrameSink::CalSysOrAndroidBankerScore()
-{
-	ASSERT ((m_wCurrentBanker == INVALID_CHAIR && m_bEnableSysBanker == true)
-		|| (m_wCurrentBanker != INVALID_CHAIR && m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() == true));
-
-	//比较倍数
+	// 比较倍数
 	bool bXianWin[4] = { false, false, false, false };							//比较输赢
 	BYTE bMultiple[4] = { 1, 1, 1, 1 };											//比较倍数
 	for (int i = 0; i < 4; i++)
 	{
-		bXianWin[i] = (m_GameLogic.CompareCard(m_cbTableCardArray[0], 5,m_cbTableCardArray[i+1], 5, bMultiple[i]) == 1);
+		bXianWin[i] = (m_GameLogic.CompareCard(bCardData[0], 5,bCardData[i+1], 5, bMultiple[i]) == 1);
 	}
-
-	//系统及机器人坐庄时真人玩家得分
-	LONGLONG lRealPlayerWinScore = 0L;
+	bAllEat = (bXianWin[0] == bXianWin[1]) && (bXianWin[1] == bXianWin[2]) && (bXianWin[2] == bXianWin[3]);
 
 	// 计算系统输赢
-	for (WORD wChairID = 0; wChairID < GAME_PLAYER; wChairID++)
+	for (int nSiet = 0; nSiet < GAME_PLAYER; nSiet++)
 	{
 		// 获取玩家
-		IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem(wChairID);
+		IServerUserItem *pServerUserItem = m_pITableFrame->GetTableUserItem(nSiet);
 
 		// 过滤庄家
-		if (wChairID == m_wCurrentBanker || pIServerUserItem == NULL)
-		{
+		if ( nSiet == m_wCurrentBanker || pServerUserItem == NULL )	
 			continue;
-		}
-
-		//过滤机器人
-		if (pIServerUserItem->IsAndroidUser() == true)
-		{
-			continue;
-		}
 
 		// 计算玩家下注
 		for (int nAarea = 0; nAarea < 4; nAarea++)
 		{
-			if ( m_lUserJettonScore[nAarea+1][wChairID] != 0 )
+			if ( m_lUserJettonScore[nAarea+1][nSiet] != 0 )
 			{
 				if( bXianWin[nAarea] )
-				{				
-					lRealPlayerWinScore += m_lUserJettonScore[nAarea+1][wChairID] * bMultiple[nAarea];
-				}
-				else
 				{
-					lRealPlayerWinScore -= m_lUserJettonScore[nAarea+1][wChairID] * bMultiple[nAarea];
-				}
-			}
-		}
-	}
-
-	return lRealPlayerWinScore;
-}
-
-//计算真人玩家坐庄时真人的得分
-LONGLONG CTableFrameSink::CalRealPlayerBankerScore()
-{
-	ASSERT (m_wCurrentBanker != INVALID_CHAIR && m_pITableFrame->GetTableUserItem(m_wCurrentBanker)->IsAndroidUser() == false);
-
-	//比较倍数
-	bool bXianWin[4] = { false, false, false, false };							//比较输赢
-	BYTE bMultiple[4] = { 1, 1, 1, 1 };											//比较倍数
-	for (int i = 0; i < 4; i++)
-	{
-		bXianWin[i] = (m_GameLogic.CompareCard(m_cbTableCardArray[0], 5,m_cbTableCardArray[i+1], 5, bMultiple[i]) == 1);
-	}
-
-	LONGLONG lAndroidWinScore = 0L;
-
-	// 计算系统输赢
-	for (WORD wChairID = 0; wChairID < GAME_PLAYER; wChairID++)
-	{
-		// 获取玩家
-		IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem(wChairID);
-
-		// 过滤庄家
-		if (wChairID == m_wCurrentBanker || pIServerUserItem == NULL)
-		{
-			continue;
-		}
-
-		// 计算玩家下注
-		for (int nAarea = 0; nAarea < 4; nAarea++)
-		{
-			if ( m_lUserJettonScore[nAarea+1][wChairID] != 0 )
-			{
-				if( bXianWin[nAarea] )
-				{				
-					if (pIServerUserItem->IsAndroidUser() == true)
+					if( pServerUserItem->IsAndroidUser() && !bSystemBanker )
+					{ 
+						lSystemScore += m_lUserJettonScore[nAarea+1][nSiet] * bMultiple[nAarea];
+					}
+					if( !pServerUserItem->IsAndroidUser() && bSystemBanker )
 					{
-						lAndroidWinScore += m_lUserJettonScore[nAarea+1][wChairID] * bMultiple[nAarea];
+						lSystemScore -= m_lUserJettonScore[nAarea+1][nSiet] * bMultiple[nAarea];
 					}
 				}
 				else
 				{
-					if (pIServerUserItem->IsAndroidUser() == true)
+					if( pServerUserItem->IsAndroidUser() && !bSystemBanker )
+					{ 
+						lSystemScore -= m_lUserJettonScore[nAarea+1][nSiet] * bMultiple[nAarea];
+					}
+					if( !pServerUserItem->IsAndroidUser() && bSystemBanker )
 					{
-						lAndroidWinScore -= m_lUserJettonScore[nAarea+1][wChairID] * bMultiple[nAarea];
+						lSystemScore += m_lUserJettonScore[nAarea+1][nSiet] * bMultiple[nAarea];
 					}
 				}
 			}
 		}
 	}
-	
-	return -lAndroidWinScore;
+
+	return ;
 }
+
 
 //查询是否扣服务费
 bool CTableFrameSink::QueryBuckleServiceCharge(WORD wChairID)
@@ -2683,13 +2273,6 @@ bool CTableFrameSink::QueryBuckleServiceCharge(WORD wChairID)
 	{
 		return true;
 	}
-
-	//离线庄家
-	if (wChairID == m_wOfflineBanker)
-	{
-		return true;
-	}
-
 	return false;
 }
 

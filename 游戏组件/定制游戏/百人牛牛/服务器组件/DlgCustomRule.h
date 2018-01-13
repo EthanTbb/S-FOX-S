@@ -67,7 +67,7 @@ struct tagCustomGeneral
 		CopyMemory(szMessageItem2,TEXT("掌声欢迎"),sizeof(TEXT("掌声欢迎")));
 		CopyMemory(szMessageItem3,TEXT("大家尽情游戏吧"),sizeof(TEXT("大家尽情游戏吧")));
 
-		StorageStart = 10000000;
+		StorageStart = 0;
 		StorageDeduct = 0;
 		StorageMax1 = 100000000;
 		StorageMul1 = 50;

@@ -315,7 +315,6 @@ CONTINUE_CARD           PNG                     "res\\CONTINUE_CARD.png"
 DISPATCH_CARD           PNG                     "res\\DISPATCH_CARD.png"
 ME_BANKER               PNG                     "res\\ME_BANKER.png"
 NO_BANKER               PNG                     "res\\NO_BANKER.png"
-ADVANCE_OPENCARD		PNG                     "res\\ADVANCE_OPENCARD.png"
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

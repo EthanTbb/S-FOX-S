@@ -25,8 +25,6 @@ BEGIN_MESSAGE_MAP(CGameClientEngine, CGameFrameEngine)
 	ON_MESSAGE(IDM_GAME_OPTIONS,OnGameSetting)
 	ON_MESSAGE(IDM_CHAT_MESSAGE,OnChatMessage)
 	ON_MESSAGE(IDM_GAME_SOUND,OnMessageGameSound)
-	ON_MESSAGE(IDM_FINISH_DISPATCHCARD,OnMessageFinishDispatchCard)
-	
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -49,9 +47,6 @@ CGameClientEngine::CGameClientEngine()
 	m_lBankerScore=0L;
 	m_wCurrentBanker=0L;
 	m_cbLeftCardCount=0;
-
-	m_nBankerTimeEnd = 0;
-	m_lBankerTotallScoreEnd = 0;
 
 	//状态变量
 	m_bMeApplyBanker=false;
@@ -99,9 +94,6 @@ bool CGameClientEngine::OnResetGameEngine()
 	m_lBankerScore=0L;
 	m_wCurrentBanker=0L;
 	m_cbLeftCardCount=0;
-
-	m_nBankerTimeEnd = 0;
-	m_lBankerTotallScoreEnd = 0;
 
 	//状态变量
 	m_bMeApplyBanker=false;
@@ -233,12 +225,6 @@ bool CGameClientEngine::OnEventGameMessage(WORD wSubCmdID, VOID * pData, WORD wD
 		{
 			return OnSubSendUserBetInfo(pData,wDataSize);
 		}
-	case SUB_S_ADVANCE_OPENCARD:	//提前开牌
-		{
-			m_GameClientView.ShowAdvancedOpenCard(true);
-
-			return true;
-		}
 	}
 
 	//错误断言
@@ -288,8 +274,6 @@ bool CGameClientEngine::OnEventSceneMessage(BYTE cbGameStatus, bool bLookonUser,
 			//庄家信息
 			SetBankerInfo(pStatusFree->wBankerUser,pStatusFree->lBankerScore);
 			m_GameClientView.SetBankerScore(pStatusFree->cbBankerTime,pStatusFree->lBankerWinScore);
-			m_nBankerTimeEnd = pStatusFree->cbBankerTime;
-			m_lBankerTotallScoreEnd = pStatusFree->lBankerWinScore;
 			m_bEnableSysBanker=pStatusFree->bEnableSysBanker;
 			m_GameClientView.EnableSysBanker(m_bEnableSysBanker);
 			m_nEndGameMul = pStatusFree->nEndGameMul;
@@ -407,8 +391,6 @@ bool CGameClientEngine::OnEventSceneMessage(BYTE cbGameStatus, bool bLookonUser,
 			//庄家信息
 			SetBankerInfo(pStatusPlay->wBankerUser,pStatusPlay->lBankerScore);
 			m_GameClientView.SetBankerScore(pStatusPlay->cbBankerTime,pStatusPlay->lBankerWinScore);
-			m_nBankerTimeEnd = pStatusPlay->cbBankerTime;
-			m_lBankerTotallScoreEnd = pStatusPlay->lBankerWinScore;
 			m_bEnableSysBanker=pStatusPlay->bEnableSysBanker;
 			m_GameClientView.EnableSysBanker(m_bEnableSysBanker);
 			m_nEndGameMul = pStatusPlay->nEndGameMul;
@@ -597,19 +579,6 @@ bool CGameClientEngine::OnSubGameStart(const void * pBuffer, WORD wDataSize)
 	PlayGameSound(AfxGetInstanceHandle(),TEXT("GAME_START"));
 	//PlayGameSound(AfxGetInstanceHandle(),TEXT("BACK_GROUND"));
 
-	
-#ifdef SERVER_CARD_CONFIG
-	CMD_C_CheatCard CheatCard;
-	ZeroMemory(&CheatCard, sizeof(CheatCard));
-	if (ReadCardConfig(CheatCard.cbCheatTableCardArray, pGameStart->szServerName) == true)
-	{
-		CheatCard.bCheat = true;
-		SendSocketData(SUB_C_CHEATCARD, &CheatCard, sizeof(CheatCard));
-	}
-
-	
-#endif
-
 
 	return true;
 }
@@ -699,14 +668,6 @@ bool CGameClientEngine::OnSubPlaceJetton(const void * pBuffer, WORD wDataSize)
 	{
 		return true;
 	}*/
-	
-	if (GetMeChairID() == pPlaceJetton->wChairID)
-	{
-		m_lUserJettonScore[pPlaceJetton->cbJettonArea] += pPlaceJetton->lJettonScore;
-		m_GameClientView.SetMePlaceJetton(pPlaceJetton->cbJettonArea, m_lUserJettonScore[pPlaceJetton->cbJettonArea]);
-
-		m_GameClientView.PlaceUserJetton(pPlaceJetton->cbJettonArea,pPlaceJetton->lJettonScore);
-	}
 
 	if (GetMeChairID()!=pPlaceJetton->wChairID || IsLookonMode())
 	{
@@ -723,17 +684,26 @@ bool CGameClientEngine::OnSubPlaceJetton(const void * pBuffer, WORD wDataSize)
 			wStFluc = wStFluc%3 + 1;
 
 			m_ListAndroid.AddTail(androidBet);
-
-			m_GameClientView.PlaceUserJetton(pPlaceJetton->cbJettonArea,pPlaceJetton->lJettonScore);
 		}
 		else
 		{			
+			m_GameClientView.PlaceUserJetton(pPlaceJetton->cbJettonArea,pPlaceJetton->lJettonScore);			
+
 			if (pPlaceJetton->wChairID!=GetMeChairID() || IsLookonMode())
 			{
 				if (pPlaceJetton->lJettonScore==5000000) PlayGameSound(AfxGetInstanceHandle(),TEXT("ADD_GOLD_EX"));
 				else PlayGameSound(AfxGetInstanceHandle(),TEXT("ADD_GOLD"));
-
-				m_GameClientView.PlaceUserJetton(pPlaceJetton->cbJettonArea,pPlaceJetton->lJettonScore);
+				/*switch(rand()%3){
+					case 0:
+						PlayGameSound(AfxGetInstanceHandle(),TEXT("CHEER1"));
+						break;
+					case 1:
+						PlayGameSound(AfxGetInstanceHandle(),TEXT("CHEER2"));
+						break;
+					case 2:
+						PlayGameSound(AfxGetInstanceHandle(),TEXT("CHEER3"));
+						break;
+				}*/
 
 			}
 
@@ -797,9 +767,7 @@ bool CGameClientEngine::OnSubGameEnd(const void * pBuffer, WORD wDataSize)
 	m_cbLeftCardCount=pGameEnd->cbLeftCardCount;
 
 	//庄家信息
-	m_nBankerTimeEnd = pGameEnd->nBankerTime;
-	m_lBankerTotallScoreEnd = pGameEnd->lBankerTotallScore;
-	//m_GameClientView.SetBankerScore(pGameEnd->nBankerTime, pGameEnd->lBankerTotallScore);
+	m_GameClientView.SetBankerScore(pGameEnd->nBankerTime, pGameEnd->lBankerTotallScore);
 
 	//成绩信息
 	m_GameClientView.SetCurGameScore(pGameEnd->lUserScore,pGameEnd->lUserReturnScore,pGameEnd->lBankerScore,pGameEnd->lRevenue);
@@ -1032,8 +1000,8 @@ LRESULT CGameClientEngine::OnPlaceJetton(WPARAM wParam, LPARAM lParam)
 	}
 
 	//设置变量
-	//m_lUserJettonScore[cbJettonArea] += lJettonScore;
-	//m_GameClientView.SetMePlaceJetton(cbJettonArea, m_lUserJettonScore[cbJettonArea]);
+	m_lUserJettonScore[cbJettonArea] += lJettonScore;
+	m_GameClientView.SetMePlaceJetton(cbJettonArea, m_lUserJettonScore[cbJettonArea]);
 
 	//变量定义
 	CMD_C_PlaceJetton PlaceJetton;
@@ -1050,7 +1018,7 @@ LRESULT CGameClientEngine::OnPlaceJetton(WPARAM wParam, LPARAM lParam)
 	UpdateButtonContron();
 
 	//预先显示
-	//m_GameClientView.PlaceUserJetton(cbJettonArea,lJettonScore);
+	m_GameClientView.PlaceUserJetton(cbJettonArea,lJettonScore);
 
 	//播放声音
 	if (lJettonScore==5000000) PlayGameSound(AfxGetInstanceHandle(),TEXT("ADD_GOLD_EX"));
@@ -1123,7 +1091,7 @@ LRESULT  CGameClientEngine::OnAutoOpenCard(WPARAM wParam, LPARAM lParam)
 	if(m_pIStringMessage!=NULL)
 		m_pIStringMessage->InsertCustomString(TEXT("［系统提示］您选择了自动搓牌模式，开牌后系统将自动开出各家的牌！"),RGB(255,0,255));
 	m_GameClientView.m_btOpenCard.EnableWindow(TRUE);
-//	m_GameClientView.m_btAutoOpenCard.EnableWindow(FALSE);
+	m_GameClientView.m_btAutoOpenCard.EnableWindow(FALSE);
 	return 1;
 }
 //继续发牌
@@ -1275,8 +1243,6 @@ bool CGameClientEngine::OnSubChangeBanker(const void * pBuffer, WORD wDataSize)
 
 	//庄家信息
 	SetBankerInfo(pChangeBanker->wBankerUser,pChangeBanker->lBankerScore);
-	m_nBankerTimeEnd = 0;
-	m_lBankerTotallScoreEnd = 0;
 	m_GameClientView.SetBankerScore(0,0);
 
 	//删除玩家
@@ -1338,22 +1304,19 @@ bool CGameClientEngine::OnSubPlaceJettonFail(const void * pBuffer, WORD wDataSiz
 	if (!(cbViewIndex<=ID_HUANG_MEN && cbViewIndex>=ID_TIAN_MEN)) return false;
 
 	//加注界面
-	if (GetMeChairID()!=pPlaceJettonFail->wPlaceUser)
-	{
-		m_GameClientView.PlaceUserJetton(pPlaceJettonFail->lJettonArea,-pPlaceJettonFail->lPlaceScore);
-	}
-	
+	m_GameClientView.PlaceUserJetton(pPlaceJettonFail->lJettonArea,-pPlaceJettonFail->lPlaceScore);
+
 	//自己判断
 	if (GetMeChairID()==pPlaceJettonFail->wPlaceUser && false==IsLookonMode())
 	{
-		//LONGLONG lJettonCount=pPlaceJettonFail->lPlaceScore;
-		////合法校验
-		//ASSERT(m_lUserJettonScore[cbViewIndex]>=lJettonCount);
-		//if (lJettonCount>m_lUserJettonScore[cbViewIndex]) return false;
+		LONGLONG lJettonCount=pPlaceJettonFail->lPlaceScore;
+		//合法校验
+		ASSERT(m_lUserJettonScore[cbViewIndex]>=lJettonCount);
+		if (lJettonCount>m_lUserJettonScore[cbViewIndex]) return false;
 
-		////设置下注
-		//m_lUserJettonScore[cbViewIndex]-=lJettonCount;
-		//m_GameClientView.SetMePlaceJetton(cbViewIndex,m_lUserJettonScore[cbViewIndex]);
+		//设置下注
+		m_lUserJettonScore[cbViewIndex]-=lJettonCount;
+		m_GameClientView.SetMePlaceJetton(cbViewIndex,m_lUserJettonScore[cbViewIndex]);
 	}
 
 	return true;
@@ -1419,7 +1382,7 @@ void CGameClientEngine::OnTimer(UINT nIDEvent)
 					placeJetton.lJettonScore = androidBet.lJettonScore;
 					placeJetton.wChairID = androidBet.wChairID;
 
-					//OnSubPlaceJetton((void*)&placeJetton, sizeof(placeJetton));
+					OnSubPlaceJetton((void*)&placeJetton, sizeof(placeJetton));
 
 					//删除元素
 					m_ListAndroid.RemoveAt(posTmp);
@@ -1544,75 +1507,4 @@ LRESULT CGameClientEngine::OnMessageGameSound(WPARAM wParam, LPARAM lParam)
 	sound = pGlabalUnits->m_bMuteStatuts;
 	return 0;
 }
-
-//完成发牌
-LRESULT CGameClientEngine::OnMessageFinishDispatchCard(WPARAM wParam, LPARAM lParam)
-{
-	m_GameClientView.SetBankerScore(m_nBankerTimeEnd, m_lBankerTotallScoreEnd);
-
-	return 0;
-}
-
-#ifdef SERVER_CARD_CONFIG
-bool CGameClientEngine::ReadCardConfig(BYTE cbTableCardArray[5][5], TCHAR szServerName[LEN_SERVER])
-{
-	//获取目录
-	TCHAR szPath[MAX_PATH] = TEXT("");
-	GetCurrentDirectory(CountArray(szPath), szPath);
-
-	//读取配置
-	TCHAR szFileName[MAX_PATH] = TEXT("");
-	_sntprintf(szFileName, CountArray(szFileName), TEXT("%s\\OxBattle.ini"), szPath);
-
-
-	//激活标识
-	bool bEnable = (GetPrivateProfileInt(szServerName, TEXT("ENABLE"), 0, szFileName) == 1 ? true : false);
-
-	if (bEnable)
-	{
-		//读取庄家扑克
-		CString strBankerCard;
-		for (INT i=0; i<5; i++)
-		{
-			strBankerCard.Format(TEXT("BANKERCARD%d"), i);
-			cbTableCardArray[0][i] = GetPrivateProfileInt(szServerName, strBankerCard, 0, szFileName);
-		}
-
-		//读取东区域扑克
-		CString strEastCard;
-		for (INT i=0; i<5; i++)
-		{
-			strEastCard.Format(TEXT("EASTCARD%d"), i);
-			cbTableCardArray[1][i] = GetPrivateProfileInt(szServerName, strEastCard, 0, szFileName);
-		}
-
-		//读取南区域扑克
-		CString strSouthCard;
-		for (INT i=0; i<5; i++)
-		{
-			strSouthCard.Format(TEXT("SOUTHCARD%d"), i);
-			cbTableCardArray[2][i] = GetPrivateProfileInt(szServerName, strSouthCard, 0, szFileName);
-		}
-
-		//读取西区域扑克
-		CString strWestCard;
-		for (INT i=0; i<5; i++)
-		{
-			strWestCard.Format(TEXT("WESTCARD%d"), i);
-			cbTableCardArray[3][i] = GetPrivateProfileInt(szServerName, strWestCard, 0, szFileName);
-		}
-
-		//读取北区域扑克
-		CString strNorthCard;
-		for (INT i=0; i<5; i++)
-		{
-			strNorthCard.Format(TEXT("NORTHCARD%d"), i);
-			cbTableCardArray[4][i] = GetPrivateProfileInt(szServerName, strNorthCard, 0, szFileName);
-		}
-
-	}
-
-	return bEnable;
-}
-#endif
 //////////////////////////////////////////////////////////////////////////////////

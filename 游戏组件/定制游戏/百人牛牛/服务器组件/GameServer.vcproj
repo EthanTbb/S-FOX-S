@@ -210,7 +210,7 @@ copy /y ..\..\..\..\ÔËÐÐ\Debug\Unicode\$(TargetFileName) ..\..\..\·¢²¼×é¼þ\·þÎñÆ
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../../../ÔËÐÐ/Release/Unicode/OxBattleServer.dll"
+				OutputFile="../Bin/OxBattleServer.dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\GameServer.def"
 				GenerateDebugInformation="TRUE"
@@ -224,10 +224,7 @@ copy /y ..\..\..\..\ÔËÐÐ\Debug\Unicode\$(TargetFileName) ..\..\..\·¢²¼×é¼þ\·þÎñÆ
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="FALSE"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="mkdir ..\..\..\·¢²¼×é¼þ\·þÎñÆ÷×é¼þ\Release\Unicode\
-copy /y ..\..\..\..\ÔËÐÐ\Release\Unicode\$(TargetFileName) ..\..\..\·¢²¼×é¼þ\·þÎñÆ÷×é¼þ\Release\Unicode\$(TargetFileName)
-"/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool

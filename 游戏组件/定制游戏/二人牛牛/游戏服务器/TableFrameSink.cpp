@@ -894,32 +894,34 @@ bool CTableFrameSink::OnEventGameConclude(WORD wChairID, IServerUserItem * pISer
             m_pITableFrame->SendTableData(m_wBankerUser,SUB_S_GAME_END,&GameEnd,sizeof(GameEnd));
             m_pITableFrame->SendLookonData(INVALID_CHAIR,SUB_S_GAME_END,&GameEnd,sizeof(GameEnd));
 
-            for(WORD Zero=0; Zero<m_wPlayerCount; Zero++)if(m_lTableScore[Zero]!=0)
-              {
-                break;
-              }
-            if(Zero!=m_wPlayerCount)
-            {
-              //修改积分
-              tagScoreInfo ScoreInfoArray[GAME_PLAYER];
-              ZeroMemory(&ScoreInfoArray,sizeof(ScoreInfoArray));
-              ScoreInfoArray[m_wBankerUser].lScore=GameEnd.lGameScore[m_wBankerUser];
-              ScoreInfoArray[m_wBankerUser].lRevenue = GameEnd.lGameTax[m_wBankerUser];
-              ScoreInfoArray[m_wBankerUser].cbType = SCORE_TYPE_WIN;
+			for (WORD Zero = 0; Zero < m_wPlayerCount; Zero++)
+			{
+				if (m_lTableScore[Zero] != 0)
+				{
+					break;
+				}
+				if (Zero != m_wPlayerCount)
+				{
+					//修改积分
+					tagScoreInfo ScoreInfoArray[GAME_PLAYER];
+					ZeroMemory(&ScoreInfoArray, sizeof(ScoreInfoArray));
+					ScoreInfoArray[m_wBankerUser].lScore = GameEnd.lGameScore[m_wBankerUser];
+					ScoreInfoArray[m_wBankerUser].lRevenue = GameEnd.lGameTax[m_wBankerUser];
+					ScoreInfoArray[m_wBankerUser].cbType = SCORE_TYPE_WIN;
 
-              TryWriteTableScore(ScoreInfoArray);
+					TryWriteTableScore(ScoreInfoArray);
 
-              //获取用户
-              IServerUserItem * pIServerUserIte=m_pITableFrame->GetTableUserItem(wChairID);
+					//获取用户
+					IServerUserItem * pIServerUserIte = m_pITableFrame->GetTableUserItem(wChairID);
 
-              //库存累计
-              if((pIServerUserIte!=NULL)&&(!pIServerUserIte->IsAndroidUser()))
-              {
-                g_lStorageCurrent-=GameEnd.lGameScore[m_wBankerUser];
-              }
+					//库存累计
+					if ((pIServerUserIte != NULL) && (!pIServerUserIte->IsAndroidUser()))
+					{
+						g_lStorageCurrent -= GameEnd.lGameScore[m_wBankerUser];
+					}
 
-            }
-
+				}
+			}
             //结束游戏
             m_pITableFrame->ConcludeGame(GS_TK_FREE);
 

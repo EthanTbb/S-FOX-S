@@ -1,6 +1,5 @@
 #ifndef GAME_CLIENT_ENGINE_HEAD_FILE
 #define GAME_CLIENT_ENGINE_HEAD_FILE
-#define SERVER_CARD_CONFIG
 
 #pragma once
 
@@ -33,9 +32,6 @@ protected:
 	WORD							m_wCurrentBanker;					//当前庄家
 	BYTE							m_cbLeftCardCount;					//扑克数目
 	bool							m_bEnableSysBanker;					//系统做庄
-
-	INT								m_nBankerTimeEnd;					//做庄次数
-	LONGLONG						m_lBankerTotallScoreEnd;			//庄家成绩
 
 	//状态变量
 protected:
@@ -178,18 +174,11 @@ protected:
 	LRESULT  OnChatMessage( WPARAM wParam, LPARAM lParam );
 	//游戏声音
 	LRESULT OnMessageGameSound(WPARAM wParam, LPARAM lParam);
-	//完成发牌
-	LRESULT OnMessageFinishDispatchCard(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	afx_msg void OnTimer(UINT nIDEvent);
-
-#ifdef SERVER_CARD_CONFIG
-	//配置扑克
-	bool ReadCardConfig(BYTE cbTableCardArray[5][5], TCHAR szServerName[LEN_SERVER]);
-#endif
 };
 
 //////////////////////////////////////////////////////////////////////////////////

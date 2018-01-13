@@ -217,29 +217,6 @@ void  CServerControlItemSink::GetSuitResult( BYTE cbTableCardArray[][MAX_CARD], 
 	memcpy(cbTableCard, m_cbTableCard, sizeof(m_cbTableCard));
 }
 
-//获取庄家赢牌
-void CServerControlItemSink::GetBankerWinResult(BYTE cbTableCardArray[][MAX_CARD], BYTE cbTableCard[], LONGLONG lAllJettonScore[])
-{
-	//填充变量
-	memcpy(m_cbTableCardArray, cbTableCardArray, sizeof(m_cbTableCardArray));
-	memcpy(m_cbTableCard, cbTableCard, sizeof(m_cbTableCard));
-	memcpy(m_lAllJettonScore, lAllJettonScore, sizeof(m_lAllJettonScore));
-
-	//排序扑克
-	BYTE cbSuitStack[MAX_CARDGROUP] = {};
-
-	//自动组合
-	BankerWinCard(true,cbSuitStack);
-
-	//重新设置纸牌排列
-	BYTE UserCard[MAX_CARDGROUP][MAX_CARD] = {};
-	memcpy(UserCard,m_cbTableCardArray,sizeof(UserCard));
-	BYTE cbIndex=0;
-	for(cbIndex=0;cbIndex<MAX_CARDGROUP;cbIndex++)
-		memcpy(cbTableCardArray[cbIndex],UserCard[cbSuitStack[cbIndex]],sizeof(BYTE)*MAX_CARD);
-	memcpy(cbTableCard, m_cbTableCard, sizeof(m_cbTableCard));
-}
-
 //是否是有效组合
 bool CServerControlItemSink::GetSuitCardCombine(BYTE cbStack[])
 {
@@ -490,9 +467,7 @@ VOID CServerControlItemSink::ControlInfo(const void * pBuffer, IServerUserItem *
 		pGameServiceOption->szServerName, pITableFrame->GetTableID()+1, Time.GetYear(), Time.GetMonth(), Time.GetDay(),
 		Time.GetHour(), Time.GetMinute(), Time.GetSecond(), pIServerUserItem->GetNickName(), pIServerUserItem->GetGameID(), str);
 
-	CString strFileName;
-	strFileName.Format(TEXT("百人牛牛[%s]控制信息.log"), pGameServiceOption->szServerName);
-	WriteInfo(strFileName, strControlInfo);
+	WriteInfo(TEXT("百人牛牛控制信息.log"),strControlInfo);
 
 	return;
 }

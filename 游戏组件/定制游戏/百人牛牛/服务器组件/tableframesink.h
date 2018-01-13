@@ -1,8 +1,6 @@
 #ifndef TABLE_FRAME_SINK_HEAD_FILE
 #define TABLE_FRAME_SINK_HEAD_FILE
 
-#define SERVER_CARD_CONFIG
-
 #pragma once
 
 #include "Stdafx.h"
@@ -88,12 +86,6 @@ protected:
     BYTE							m_cbTableCardArray[5][5];				//桌面扑克
 	BYTE							m_cbTableCard[CARD_COUNT];				//桌面扑克
 
-#ifdef SERVER_CARD_CONFIG
-	BYTE							m_cbCheatTableCardArray[5][5];				//桌面扑克
-	bool							m_bCheat;
-#endif
-
-
 	//状态变量
 protected:
 	DWORD							m_dwJettonTime;							//开始时间
@@ -104,7 +96,6 @@ protected:
 protected:
 	CWHArray<WORD>					m_ApplyUserArray;						//申请玩家
 	WORD							m_wCurrentBanker;						//当前庄家
-	WORD							m_wOfflineBanker;						//离线庄家
 	WORD							m_wBankerTime;							//做庄次数
 	LONGLONG						m_lBankerScore;							//
 	LONGLONG						m_lBankerWinScore;						//累计成绩
@@ -241,10 +232,8 @@ private:
 protected:
 	// 库存优化
 	VOID StorageOptimize();
-	//计算系统及机器人坐庄时真人玩家得分
-	LONGLONG CalSysOrAndroidBankerScore();
-	//计算真人玩家坐庄时真人的得分
-	LONGLONG CalRealPlayerBankerScore();
+	// 判断输赢
+	void JudgeSystemScore( BYTE bCardData[5][5], LONGLONG& lSystemScore, bool& bAllEat );
 	// 记录函数
 	void WriteInfo( LPCTSTR pszFileName, LPCTSTR pszString );
 
@@ -259,9 +248,6 @@ private:
 	LONGLONG CalculateScore();
 	//推断赢家
 	void DeduceWinner(bool &bWinTian, bool &bWinDi, bool &bWinXuan,bool &bWinHuan,BYTE &TianMultiple,BYTE &diMultiple,BYTE &TianXuanltiple,BYTE &HuangMultiple );
-
-	//获取牌信息
-	CString GetCardInfo(BYTE cbCardData);
 };
 
 
